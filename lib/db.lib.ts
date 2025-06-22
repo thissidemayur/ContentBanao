@@ -1,44 +1,43 @@
 import mongoose from "mongoose";
-import { ApiError } from "next/dist/server/api-utils";
 
 const MONGODB_URI = process.env.MONGODB_URI!;
 
 
-if(!MONGODB_URI) {
+if (!MONGODB_URI) {
     throw new Error("MONGODB_URI are not defined in .env please check at .env file")
 }
 
-let cached  = global.mongoose;
+let cached = global.mongoose;
 
-if(!cached) {
-    cached = global.mongoose = {conn:null , promise:null}
+if (!cached) {
+    cached = global.mongoose = { conn: null, promise: null }
 }
 
 export async function connectToDB() {
 
     // if connection is stablished; 
-    if(cached.conn) return cached.conn
+    if (cached.conn) return cached.conn
 
     // if connection is going to stablished asynchronous
     if (!cached.promise) {
         const opts = {
-            bufferCommands:true ,
-            maxPoolSize:10,
+            bufferCommands: true,
+            maxPoolSize: 10,
         };
 
-        cached.promise = mongoose.connect(MONGODB_URI,opts)
-        .then(()=>mongoose.connection)  
+        cached.promise = mongoose.connect(MONGODB_URI, opts)
+            .then(() => mongoose.connection)
     }
 
 
-try {
-    cached.conn =await cached.promise
-} catch (error) {
-    cached.promise = null
-    console.error("Error:: types.s.ts = ",error)
-    throw new Error("Error while resolving Promise at Database connection ")
-}
-return cached.conn
+    try {
+        cached.conn = await cached.promise
+    } catch (error) {
+        cached.promise = null
+        console.error("Error:: types.s.ts = ", error)
+        throw new Error("Error while resolving Promise at Database connection ")
+    }
+    return cached.conn
 
 
 }

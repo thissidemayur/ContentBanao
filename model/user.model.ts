@@ -39,10 +39,9 @@ const User =models?.User ||  model<IUser>("User",userSchema)
 export default User;
 
 
-/***************************** as a TS begineer what we did *****************************/
-/* 
-1. create a TS interface(IUser) for user Schema. defined data-type of userSchema field here 
-2. defined user schema by impleting IUser therefore our schema is type proof
-3. hash password using bcrypt
-4. create user model only if it's have been already created else export created one's userSchmea
-*/
+/***************************** USER SCHEMA SUMMARY *****************************
+1. Defined a TypeScript interface IUser with all required fields.
+2. Used that interface to create a strongly-typed Mongoose schema.
+3. Added password hashing in pre-save hook.
+4. Prevented re-registering the model with Mongoose during hot reload (Next.js dev mode).
+********************************************************************************/

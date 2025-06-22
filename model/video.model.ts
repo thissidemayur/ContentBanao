@@ -58,5 +58,14 @@ export const videoSchema= new Schema({
     }
 })
 
-const Video = models?.Video || model<IVideo>("Video",)
+const Video = models?.Video || model<IVideo>("Video",videoSchema)
 export default Video;
+
+
+
+/***************************** VIDEO MODEL SUMMARY *****************************
+1. Used a VIDEO_DIMENSION constant for default transformation values.
+2. Created a well-typed IVideo interface that reflects the schema.
+3. Ensured the schema uses IVideo for strong typing.
+4. Fixed the bug: model<IVideo>("Video", ...) must include the second argument: the schema.
+********************************************************************************/
