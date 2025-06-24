@@ -41,7 +41,7 @@ export const authOptions: NextAuthOptions = {
                     };
                 } catch (error) {
                     console.error("Auth Error: ", error);
-                    throw new Error("Unauthorized login attempt");
+                    throw error
                 }
             }
         })
@@ -79,7 +79,7 @@ export const authOptions: NextAuthOptions = {
     },
 
     // Step 5: Secret key to sign/verify JWT (must be set in .env)
-    secret: process.env.NEXTAUTH_SECRET!
+    secret: process.env.NEXTAUTH_SECRET
 };
 
 
