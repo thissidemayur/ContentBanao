@@ -1,40 +1,66 @@
+import { clearModelCache } from "@/lib/Backend-helperFn";
+import { IUser } from "@/types/User.types";
 import bcrypt from "bcryptjs";
-import mongoose, { model, models, Schema } from "mongoose";
+import { model, models, Schema } from "mongoose";
 
-export interface IUser  {
-    email:string;
-    password:string;
-    createdAt?:Date;
-    updatedAt?:Date;
-    _id?:mongoose.Types.ObjectId;
-}
 
-const userSchema =new Schema<IUser>({
-    email:{
-        type:String,
-        required:true,
-        unique:true,
-        lowercase:true,
-        trim:true,
-    } ,
-    password:{
-        type:String,
-        required:true,
-        unique:true,
-        trim:true,
+
+const userSchema = new Schema<IUser>({
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true,
+    },
+    password: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+    },
+    avtar: {
+        type: String
+    },
+    bio: {
+        type: String,
+        trime: true,
+
+    },
+    firstName: {
+        type: String,
+        lowercase: true,
+        trim: true
+    },
+    lastName: {
+        type: String,
+        lowercase: true,
+        trim: true
+    },
+    userName: {
+        type: String,
+        sparse: true,
+        unique: true,
+        default: function () {
+            return this._id?.toString()
+        }
     }
-    
-},{timestamps:true})
 
-userSchema.pre("save", async function (next){
-    if(this.isModified("password")) {
-        this.password= await bcrypt.hash(this.password, 10)
+
+}, { timestamps: true })
+
+userSchema.pre("save", async function (next) {
+    if (!this.userName) this.userName = this._id.toString()
+
+    if (this.isModified("password")) {
+        this.password = await bcrypt.hash(this.password, 10)
     }
     next();
 })
 
-
-const User =models?.User ||  model<IUser>("User",userSchema)
+// for hot reload
+clearModelCache("User")
+const User = models?.User || model<IUser>("User", userSchema)
 
 export default User;
 
