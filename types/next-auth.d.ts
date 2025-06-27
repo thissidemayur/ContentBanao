@@ -1,13 +1,30 @@
-import NextAuth, { DefaultSession } from "next-auth"
+import NextAuth, { DefaultSession, DefaultUser } from "next-auth"
+import { JWT } from "next-auth/jwt";
 
+
+// Extend built-in NextAuth types to support custom fields like `userName`
+// This allows you to access `session.user.userName` and `token.userName` with type safety
 declare module "next-auth" {
-
-    
   interface Session {
     user: {
 
-      id: string // using jwt token but i dont why they are using address and what it is 
-    } & DefaultSession["user"]
+      id: string, // using jwt token but i dont why they are using address and what it is 
+      userName?: string | mongoose.Types.ObjectId
+    } & DefaultSession["user"] // includes name, email, image
+  }
+
+  interface User extends DefaultUser {
+    id: string;
+    userName?: string;
+  }
+}
+
+
+// extend the token objext
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string;
+    userName: string | mongoose.Types.ObjectId
   }
 }
 
