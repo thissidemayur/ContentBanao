@@ -1,3 +1,5 @@
+import { clearModelCache } from "@/lib/Backend-helperFn";
+import { MediaItem } from "@/types/media.types";
 import mongoose, { model, models, Schema } from "mongoose";
 
 export const VIDEO_DIMENSION = {
@@ -9,63 +11,65 @@ export const VIDEO_DIMENSION = {
 export interface IVideo {
     _id?: mongoose.Types.ObjectId;
     title: string;
-    descrition: string;
-    videourl: string;
-    thumbnailUrl: string;
+    description: string;
+    media: MediaItem;
     controls: boolean;
-    transformation: {
-        height: number;
-        width: number;
-        quality: number;
-    };
 }
 
-export const videoSchema = new Schema({
+const transformationSchema = new Schema({
+    height: {
+        type: Number,
+
+        default: VIDEO_DIMENSION.height
+    },
+    width: {
+        type: Number,
+        default: VIDEO_DIMENSION.width
+    },
+    quality: {
+        type: Number,
+        min: 1,  //from imagekit
+        max: 100, // from imagekit,
+        default: 80
+    }
+}, { _id: false })
+
+const mediaSchema = new Schema<MediaItem>({
+    type: {
+        type: String,
+        enum: ['video'],
+        required: true,
+    },
+    url: {
+        type: String,
+        required: true,
+    },
+    caption: {
+        type: String,
+        trim: true
+    },
+    transformation: transformationSchema
+}, { _id: false })
+
+export const videoSchema = new Schema<IVideo>({
     title: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
-    descrition: {
+    description: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
-    videourl: {
-        type: String,
-        required: true
-    },
-    thumbnailUrl: {
-        type: String,
-        required: true
-    },
+    media: mediaSchema,
     controls: {
         type: Boolean,
         default: true
     },
-    transformation: {
-        height: {
-            type: Number,
-            default: VIDEO_DIMENSION.height
-        },
-        width: {
-            type: Number,
-            default: VIDEO_DIMENSION.width
-        },
-        quality: {
-            type: Number,
-            min: 1,  //from imagekit
-            max: 100 // from imagekit
-        }
-    }
 })
 
+clearModelCache("Video")
 const Video = models?.Video || model<IVideo>("Video", videoSchema)
 export default Video;
 
-
-
-/***************************** VIDEO MODEL SUMMARY *****************************
-1. Used a VIDEO_DIMENSION constant for default transformation values.
-2. Created a well-typed IVideo interface that reflects the schema.
-3. Ensured the schema uses IVideo for strong typing.
-4. Fixed the bug: model<IVideo>("Video", ...) must include the second argument: the schema.
-********************************************************************************/
