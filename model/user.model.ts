@@ -19,7 +19,7 @@ const userSchema = new Schema<IUser>({
         unique: true,
         trim: true,
     },
-    avtar: {
+    avatar: {
         type: String
     },
     bio: {
@@ -57,6 +57,10 @@ userSchema.pre("save", async function (next) {
     }
     next();
 })
+
+userSchema.methods.validatePassword = async function (inputPassword: string): Promise<boolean> {
+    return await bcrypt.compare(inputPassword, this.password);
+}
 
 // for hot reload
 clearModelCache("User")
