@@ -5,7 +5,6 @@ import { NextRequest, NextResponse } from "next/server"; // Next.js Fetch API eq
 // ✅ This route will handle POST requests to `/api/auth/register`
 export async function POST(req: NextRequest) {
     try {
-        // ⛳ Step 1: Parse incoming JSON data from the request body
         let { email, password } = await req.json();
 
         if (!email || !password) {
@@ -16,6 +15,12 @@ export async function POST(req: NextRequest) {
         }
 
         email = email.toLowerCase().trim();
+        if (password.length < 6) {
+            return NextResponse.json(
+                { error: "Password must be at least 6 characters long." },
+                { status: 400 }
+            );
+        }
         password = password.trim();
 
 
@@ -43,10 +48,7 @@ export async function POST(req: NextRequest) {
     } catch (error) {
 
         console.error("Error :: User registration failed: ", error);
-        return NextResponse.json(
-            { error: "Failed to register user. Please try again later." },
-            { status: 500 }
-        );
+        throw error
     }
 }
 
