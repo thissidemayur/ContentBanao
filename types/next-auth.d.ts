@@ -8,7 +8,7 @@ declare module "next-auth" {
   interface Session {
     user: {
 
-      id: string, // using jwt token but i dont why they are using address and what it is 
+      id: string,
       userName?: string | mongoose.Types.ObjectId
     } & DefaultSession["user"] // includes name, email, image
   }

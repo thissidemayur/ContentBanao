@@ -7,7 +7,7 @@ export interface IUser {
     updatedAt?: Date;
     _id?: mongoose.Types.ObjectId;
 
-    avtar?: string;
+    avatar?: string;
     bio?: string
     userName: string | mongoose.Types.ObjectId,
     firstName?: string,
