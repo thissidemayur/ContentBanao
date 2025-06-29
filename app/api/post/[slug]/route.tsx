@@ -3,53 +3,82 @@ import { connectToDB } from "@/lib/db.lib";
 import Blog from "@/model/blog.model";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { Blog as IBlog } from "@/types/blog.types";// DELETE: 
 
-// DELETE: post/[slug]  ; delete post
+
+// post/[slug]  ; delete post not connected
 export async function DELETE(req: NextRequest) {
-    const { authorId, slug } = await req.json()
-
-    if (!authorId || slug) return NextResponse.json(
+    const url = req.nextUrl
+    const slug = url.pathname.split("/").pop()
+    const session = await getServerSession(authOptions)
+    const authorId = session?.user.id
+    if (!authorId || !slug) return NextResponse.json(
         { error: "please ensure you are authorise user or slug should not empty" },
         { status: 400 }
-    )
+    );
 
-    const session = await getServerSession(authOptions)
+    if (!slug) {
+        return NextResponse.json({ error: "Slug is required" }, { status: 400 });
+    }
+    console.log("slug: ", slug)
+
 
     try {
-        await connectToDB()
-        const deletedPost = await Blog.findOneAndDelete(
-            { $and: [{ _id: session?.user?.id }, { slug }] },
-        ).lean()
+        await connectToDB();
 
-        if (deletedPost) {
-            console.log('Post deleted successfully:', deletedPost);
+        const blog: IBlog | null = await Blog.findOne({ slug });
 
-            return NextResponse.json(
-                { message: "Post deleted successfully", data: {} },
-                { status: 204 }
-            )
+        console.log("Blog: ", blog)
+
+        if (!blog) {
+            return NextResponse.json({ error: "Blog not found" }, { status: 404 });
         }
-        else return NextResponse.json(
-            { error: "no post matched" },
-            { status: 404 }
-        )
+
+        console.log("Logged-in user ID:", session.user.id);
+        console.log("Blog author ID (from DB):", blog.authorId?.toString());
+
+        // Now you can check authorId and delete if authorized
+
+        // For example:
+        if (blog.authorId?.toString() !== session.user.id) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+
+        await Blog.findOneAndDelete({ slug, authorId: blog.authorId });
+
+        return NextResponse.json(
+            { message: "Post deleted successfully", data: {} },
+            { status: 200 }
+        );
 
     } catch (error) {
-        console.error("Error while deleting post: ", error)
-        throw error
+        console.error("Error while deleting post: ", error);
+        throw error;
     }
+
 }
 
 
-// PUT: post/[slug] ; update post
-export async function PUT(req: NextRequest, { params }: { params: { slug: string } }) {
+// PATCH: post/[slug] ; update post
+export async function PATCH(req: NextRequest) {
     const {
-        title, description, content, summary, image, tags, isPublished
+        title, description, content, summary, image, tags, isPublished, userName
     } = await req.json()
-
     const session = await getServerSession(authOptions)
+    console.log("session: ", session)
 
-    const { slug } = params
+    if (!session || session.user.userName != userName) {
+        console.error("error while sigining in")
+        return NextResponse.json(
+            { error: "unauthorize!" },
+            { status: 401 }
+        )
+    }
+
+    const url = req.nextUrl;
+    const slug = url.pathname.split("/").pop();
+    console.log("slug: ", slug)
     if (!slug) {
         console.log("Slug: ", slug)
         return NextResponse.json(
@@ -66,7 +95,7 @@ export async function PUT(req: NextRequest, { params }: { params: { slug: string
     try {
 
         await connectToDB()
-        const blog = await Blog.findOne({ $and: [{ slug }, { _id: session?.user.id }] })
+        const blog = await Blog.findOne({ slug, authorId: session?.user.id })
         if (!blog) return NextResponse.json(
             { error: "Blog not found" },
             { status: 404 }
@@ -91,14 +120,18 @@ export async function PUT(req: NextRequest, { params }: { params: { slug: string
 
             return NextResponse.json(
                 { message: "Blog update successfully!", data: {} },
-                { status: 204 }
+                { status: 200 }
             )
 
         }
 
     } catch (error) {
         console.error("error while updating post:: ", error)
-        throw error
+
+        return NextResponse.json(
+            { message: "internal server error while updating blof!" },
+            { status: 400 }
+        )
     }
 
 
@@ -106,9 +139,9 @@ export async function PUT(req: NextRequest, { params }: { params: { slug: string
 
 
 // GET:post/[slug]   ; get single post
-export async function GET({ query }: { query: { slug: string } }) {
-    const { slug } = query
-
+export async function GET(req: NextRequest) {
+    const url = req.nextUrl
+    const slug = url.pathname.split("/").pop()
     if (!slug) {
         console.log("SLug: ", slug)
         return NextResponse.json(

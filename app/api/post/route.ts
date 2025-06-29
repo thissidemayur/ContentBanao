@@ -1,7 +1,6 @@
 import { authOptions } from "@/lib/auth.lib";
 import { connectToDB } from "@/lib/db.lib";
 import Blog from "@/model/blog.model";
-import { url } from "inspector";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
