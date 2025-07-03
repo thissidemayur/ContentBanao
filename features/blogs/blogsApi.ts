@@ -1,31 +1,43 @@
 import { Blog } from "@/types/blog.types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+interface PaginatedResponse {
+    totalPosts: number;
+    totalPages: number;
+    currentPage: number;
+    posts: Blog[];
+}
+
 export const blogsApi = createApi({
     reducerPath: 'blogsApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3001/api' }),
+    baseQuery: fetchBaseQuery({
+        baseUrl: 'http://localhost:3000/api',
+        credentials: 'include'
+
+    }),
+
     tagTypes: ['Blog'],
     endpoints: (builder) => ({
-
         // get all blog
-        getBlogs: builder.query<Blog[], void>({
-            query: () => '/blogs',
+        getBlogs: builder.query<PaginatedResponse, { page: number; limit: number }>({
+            query: ({ page = 1, limit = 10 }) => `/post?page=${page}&limit=${limit}`,
             providesTags: ["Blog"]
 
         }),
 
         // get blog by id
-        getBlogByID: builder.query<Blog, string>({
-            query: (id) => `/blogs/${id}`,
+        getBlogByID: builder.query<{ message: string; data: Blog }, string>({
+            query: (id) => `/post/${id}`,
             providesTags: ["Blog"]
         }),
 
-        // create blof
-        createBlog: builder.mutation<void, Blog>({
+        // create blog
+        createBlog: builder.mutation<Blog, Blog>({
             query: (newBlog) => ({
-                url: "/blogs",
+                url: "/post",
                 method: "POST",
-                body: newBlog
+                body: newBlog,
+
             }),
             invalidatesTags: ['Blog'],
 
@@ -34,7 +46,7 @@ export const blogsApi = createApi({
         // update blog
         updateBlog: builder.mutation<void, { id: string, updateBlog: Partial<Blog> }>({
             query: ({ updateBlog, id }) => ({
-                url: `/blogs/${id}`,
+                url: `/post/${id}`,
                 method: "PATCH",
                 body: updateBlog
             }),
@@ -44,11 +56,10 @@ export const blogsApi = createApi({
         // delete blog
         deleteBlog: builder.mutation<void, string>({
             query: (id) => ({
-                url: `/blogs/${id}`,
+                url: `/post/${id}`,
                 method: "DELETE"
             }),
             invalidatesTags: ['Blog'],
-
         })
     })
 })
@@ -61,4 +72,5 @@ export const {
     useUpdateBlogMutation,
     useDeleteBlogMutation,
 } = blogsApi
+
 
