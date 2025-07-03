@@ -14,8 +14,8 @@ export default withAuth(
 
                 if (
                     pathname.startsWith("/api/auth") ||
-                    pathname === '/login' ||
-                    pathname === '/register'
+                    pathname === '/auth/login' ||
+                    pathname === '/auth/register'
                 ) return true
 
                 if (pathname === "/" || pathname.startsWith("/api/video")) return true

@@ -11,7 +11,7 @@ export interface Blog {
     slug?: string,
     media?: MediaItem[], // for image only
     tags?: string[],
-    createdAt: Date,
-    updatedAt: Date,
+    createdAt?: Date,
+    updatedAt?: Date,
 }
 
