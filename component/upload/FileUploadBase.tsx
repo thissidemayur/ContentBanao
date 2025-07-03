@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
     ImageKitAbortError,
@@ -7,94 +7,77 @@ import {
     ImageKitUploadNetworkError,
     upload,
 } from "@imagekit/next";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
-interface FileuploadProps {
+interface FileUploadProps {
+    file: File;
     onSuccess: (res: any) => void;
-    onProgress?: (progress: number) => void
-    file: File
+    onProgress?: (progress: number) => void;
 }
 
-const FileUploadBase = ({ onSuccess, onProgress, file }: FileuploadProps) => {
+const FileUploadBase: React.FC<FileUploadProps> = ({ file, onSuccess, onProgress }) => {
 
-    const abortController = new AbortController();
-
-    const authenticator = async (): Promise<{
-        signature: string, expire: number, token: string, publicKey: string
-    }> => {
-        try {
-
-            const response = await fetch("/api//auth/imagekit-aut");
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Request failed with status ${response.status}: ${errorText}`);
-            }
-            const data = await response.json();
-
-            return { ...data, expire: Number(data.expire) };
-        } catch (error) {
-            console.error("Authentication error:", error);
-            throw new Error("Authentication request failed");
-        }
+    const getAuthParams = async () => {
+        const res = await fetch("/api/imagekit-auth");
+        const data = await res.json();
+        return {
+            ...data,
+            expire: Number(data.expire),
+        };
     };
 
-    const handleUpload = async () => {
 
-        const authParams = await authenticator();
-        const { signature, expire, token, publicKey } = authParams;
-
-        try {
-            const uploadResponse = await upload({
-                file,
-                fileName: file.name, // Optionally set a custom file name
-                expire: Number(expire),
-                token,
-                signature,
-                publicKey,
-
-                onProgress: (event) => {
-                    if (event.lengthComputable && onProgress) {
-                        const percentage = (event.loaded / event.total) * 100
-
-                        onProgress(Math.round(percentage))
-                    }
-                },
-
-                abortSignal: abortController.signal,
-            });
-            console.log("Upload response:", uploadResponse);
-            onSuccess(uploadResponse)
-        } catch (error) {
-            // Handle specific error types provided by the ImageKit SDK.
-            if (error instanceof ImageKitAbortError) {
-                console.error("Upload aborted:", error.reason);
-            } else if (error instanceof ImageKitInvalidRequestError) {
-                console.error("Invalid request:", error.message);
-            } else if (error instanceof ImageKitUploadNetworkError) {
-                console.error("Network error:", error.message);
-            } else if (error instanceof ImageKitServerError) {
-                console.error("Server error:", error.message);
-            } else {
-                console.error("Upload error:", error);
-            }
-        }
-
-    }
 
     useEffect(() => {
+        if (!file) return;
 
-        handleUpload()
+        const abortController = new AbortController();
+        let isUploadDone = false;
 
-        return () => {
-            abortController.abort(); // cancel the upload request if still pending
-        }
-    }, [file])
+        const handleUpload = async () => {
+            try {
+                const { signature, expire, token, publicKey } = await getAuthParams();
+
+                const uploadResponse = await upload({
+                    file,
+                    fileName: file.name,
+                    expire,
+                    token,
+                    signature,
+                    publicKey,
+                    onProgress: (event) => {
+                        if (event.lengthComputable && onProgress) {
+                            const percent = (event.loaded / event.total) * 100;
+                            onProgress(Math.round(percent));
+                        }
+                    },
+                    abortSignal: abortController.signal,
+                });
+
+                isUploadDone = true;
+                console.log("✅ Upload successful", uploadResponse);
+                onSuccess(uploadResponse);
+            } catch (error) {
+                if (error instanceof ImageKitAbortError) {
+                    console.error("Upload aborted", error.reason);
+                } else {
+                    console.error("Upload error", error);
+                }
+            }
+        };
+
+        handleUpload();
+
+
+    }, [file]);
+
 
 
     return null;
 };
 
 export default FileUploadBase;
+
 
 
 
