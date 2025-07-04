@@ -19,7 +19,8 @@ interface IBlog {
     tags?: string[],
     createdAt: Date,
     updatedAt: Date,
-    isPublished: boolean
+    isPublished: boolean,
+    likes?: [{ type: mongoose.Types.ObjectId, ref: any }]
 }
 
 
@@ -69,8 +70,14 @@ const blogSchema = new Schema<IBlog>({
 
     isPublished: {
         type: Boolean,
-        default: false
-    }
+        default: true
+    },
+
+    likes: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'User'
+    }]
+
 }, {
     timestamps: true
 })

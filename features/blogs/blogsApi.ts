@@ -5,7 +5,28 @@ interface PaginatedResponse {
     totalPosts: number;
     totalPages: number;
     currentPage: number;
-    posts: Blog[];
+    posts: responseBlog[];
+}
+
+interface imageDetail {
+
+    type: string;
+    url: string
+
+}
+interface responseBlog {
+    _id: string;
+    title?: string,
+    isPublished?: Boolean,
+    summary?: string,
+    authorId?: string,
+    slug?: string,
+    media?: imageDetail[] | [], // for image only
+    tags?: string[] | [],
+    createdAt?: string,
+    updatedAt?: string,
+    content?: string,
+    likes?: []
 }
 
 export const blogsApi = createApi({
@@ -13,7 +34,6 @@ export const blogsApi = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://localhost:3000/api',
         credentials: 'include'
-
     }),
 
     tagTypes: ['Blog'],
@@ -26,13 +46,13 @@ export const blogsApi = createApi({
         }),
 
         // get blog by id
-        getBlogByID: builder.query<{ message: string; data: Blog }, string>({
+        getBlogByID: builder.query<{ message: string; data: responseBlog }, string>({
             query: (id) => `/post/${id}`,
             providesTags: ["Blog"]
         }),
 
         // create blog
-        createBlog: builder.mutation<Blog, Blog>({
+        createBlog: builder.mutation<responseBlog, Blog>({
             query: (newBlog) => ({
                 url: "/post",
                 method: "POST",
@@ -44,9 +64,9 @@ export const blogsApi = createApi({
         }),
 
         // update blog
-        updateBlog: builder.mutation<void, { id: string, updateBlog: Partial<Blog> }>({
+        updateBlog: builder.mutation<responseBlog, { id: string, updateBlog: Partial<Blog> }>({
             query: ({ updateBlog, id }) => ({
-                url: `/post/${id}`,
+                url: `/like/${id}`,
                 method: "PATCH",
                 body: updateBlog
             }),
@@ -60,6 +80,15 @@ export const blogsApi = createApi({
                 method: "DELETE"
             }),
             invalidatesTags: ['Blog'],
+        }),
+
+        // like blog
+        likeBlog: builder.mutation<{ message: string, totalLikes: number, liked: boolean }, string>({
+            query: (slug: string) => ({
+                url: `/post/${slug}/like`,
+                method: "POST",
+            }),
+            invalidatesTags: ['Blog']
         })
     })
 })
@@ -71,6 +100,5 @@ export const {
     useCreateBlogMutation,
     useUpdateBlogMutation,
     useDeleteBlogMutation,
+    useLikeBlogMutation
 } = blogsApi
-
-
