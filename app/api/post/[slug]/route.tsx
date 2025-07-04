@@ -12,6 +12,7 @@ export async function DELETE(req: NextRequest) {
     const slug = url.pathname.split("/").pop()
     const session = await getServerSession(authOptions)
     const authorId = session?.user.id
+
     if (!authorId || !slug) return NextResponse.json(
         { error: "please ensure you are authorise user or slug should not empty" },
         { status: 400 }
@@ -46,6 +47,7 @@ export async function DELETE(req: NextRequest) {
 
 
         await Blog.findOneAndDelete({ slug, authorId: blog.authorId });
+        console.log("blog deleted successfully")
 
         return NextResponse.json(
             { message: "Post deleted successfully", data: {} },
@@ -119,7 +121,7 @@ export async function PATCH(req: NextRequest) {
             await blog.save({ validateBeforeSave: false })
 
             return NextResponse.json(
-                { message: "Blog update successfully!", data: {} },
+                { message: "Blog update successfully!", data: { data: blog } },
                 { status: 200 }
             )
 
@@ -129,7 +131,7 @@ export async function PATCH(req: NextRequest) {
         console.error("error while updating post:: ", error)
 
         return NextResponse.json(
-            { message: "internal server error while updating blof!" },
+            { message: "internal server error while updating blog!" },
             { status: 400 }
         )
     }
@@ -141,7 +143,10 @@ export async function PATCH(req: NextRequest) {
 // GET:post/[slug]   ; get single post
 export async function GET(req: NextRequest) {
     const url = req.nextUrl
-    const slug = url.pathname.split("/").pop()
+    const encodingSlug = url.pathname.split("/").pop()
+    const slug = decodeURIComponent(encodingSlug || "")
+    console.log("slugBackend: ", slug)
+    console.log("encodingSlugBackend: ", encodingSlug)
     if (!slug) {
         console.log("SLug: ", slug)
         return NextResponse.json(

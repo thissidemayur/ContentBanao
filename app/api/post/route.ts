@@ -1,28 +1,52 @@
+import { blogsApi } from "@/features/blogs/blogsApi";
 import { authOptions } from "@/lib/auth.lib";
 import { connectToDB } from "@/lib/db.lib";
 import Blog from "@/model/blog.model";
+import { current } from "@reduxjs/toolkit";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 
 // GET: api/post  ; get all post
-export async function GET() {
+export async function GET(req: NextRequest) {
     await connectToDB()
 
-    const allBlogs = await Blog.find({}).lean()
+    const { searchParams } = new URL(req.url)
+    const page = parseInt(searchParams.get("page") || "1")
+    const limit = parseInt(searchParams.get("limit") || "10")
+    const skip = (page - 1) * limit
 
-    if (!allBlogs) return NextResponse.json(
-        { error: "No post present" },
-        { status: 404 }
-    )
+    try {
+        const totalPosts = await Blog.countDocuments();
+        const totalPages = Math.ceil(totalPosts / limit);
 
-    return NextResponse.json(
-        {
-            message: "Blog reterive successfully",
-            data: allBlogs,
-        },
-        { status: 200 }
-    )
+        const allBlogs = await Blog.find({})
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean()
+
+        if (!allBlogs.length) return NextResponse.json(
+            { error: "No post present", },
+            { status: 404 }
+        )
+
+        console.log("total blogs:: ", allBlogs)
+
+        return NextResponse.json(
+            {
+                message: "Blog reterive successfully",
+                totalPosts,
+                totalPages,
+                currentPage: page,
+                posts: allBlogs
+            },
+            { status: 200 }
+        )
+    } catch (error) {
+        console.error("error whiling fetching BLOG: ", error)
+        throw error
+    }
 
 }
 
