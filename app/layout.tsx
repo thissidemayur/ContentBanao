@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import '@/styles/global.scss'; // adjust path as needed
+import '@/styles/global.scss';
+import ClientLayout from "./ClientLayout";
+import Navbar from "@/component/Navbar";
+import AppProviders from "./providers/AppProviders";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +19,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Blog + Reel website",
-  description: "i have created blog + reel website",
+  description: "I have created a blog + reel website",
 };
 
 export default function RootLayout({
@@ -23,12 +27,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        {/* Wrap children in StoreProvider */}
+        <AppProviders>
+          <ClientLayout>
+            <Navbar />
+            {children}
+          </ClientLayout>
+        </AppProviders>
       </body>
     </html>
   );
