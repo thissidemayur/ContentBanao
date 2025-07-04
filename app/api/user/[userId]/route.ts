@@ -4,17 +4,23 @@ import User from "@/model/user.model";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
+
 // PATCH: update account [ api/user/[userId]/]
 export async function PATCH(req: NextRequest) {
+
+
     const { firstName, lastName, avtar, bio, email, userName } = await req.json()
-    console.log("UserName: ", userName, " firstName:", firstName)
+    const url = req.nextUrl
+    const userId = url.pathname.split("/").pop()
+
 
     const session = await getServerSession(authOptions)
     console.log("session: ", session)
 
-    if (!session) {
+
+    if (!session || session.user.id !== userId) {
         return NextResponse.json(
-            { message: "You must be logged in." },
+            { message: "Unauthorize" },
             { status: 401 }
         )
     }
@@ -59,4 +65,75 @@ export async function PATCH(req: NextRequest) {
         throw error
     }
 }
-// PUT
+
+// GET: get user account    [ api/user/[userId]/]
+export async function GET(req: NextRequest) {
+    const url = req.nextUrl
+    const userName = url.pathname.split("/").pop()
+
+
+    if (!userName) return NextResponse.json(
+        { message: "User Id not found" },
+        { status: 400 }
+    )
+
+    try {
+        await connectToDB()
+
+        const user = await User.findById(userName).select("-password").lean()
+
+        if (!user) return NextResponse.json(
+            { message: "User not found" },
+            { status: 401 }
+        )
+
+        return NextResponse.json(
+            { message: "User found successfully", data: user },
+            { status: 200 }
+        )
+    } catch (error) {
+        console.error("error while extracting user with its id: ", error)
+        throw error
+    }
+}
+
+// Delete account:
+export async function DELETE(req: NextRequest) {
+
+    const { password } = await req.json()
+    const url = req.nextUrl
+    const userId = url.pathname.split("/").pop()
+    if (!password) return NextResponse.json(
+        { message: "Password field is empty" },
+        { status: 400 }
+    )
+
+    const session = await getServerSession(authOptions)
+    console.log("session in delete: ", session)
+
+    if (!session || session.user.id !== userId) {
+        return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+    }
+    try {
+
+        await connectToDB()
+
+        const user = await User.findOne({ userName: session?.user.id })
+
+        const isPasswordValid = await user.validatePassword(password)
+        if (!isPasswordValid) {
+            return NextResponse.json({ message: 'Incorrect password' }, { status: 401 });
+        }
+
+        await user.deleteOne()
+
+        return NextResponse.json({ message: 'User deleted successfully ', data: {} }, { status: 201 });
+
+
+    } catch (error) {
+        console.error("error ocurr while deleting account: ", error)
+        throw error
+    }
+
+}
+
