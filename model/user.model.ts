@@ -1,9 +1,22 @@
-import { clearModelCache } from "@/lib/Backend-helperFn";
+/*   Why import mongoose, { Schema, model, models } from "mongoose" can cause problems in Next.js App Router projects
+
+In serverless runtimes (like Vercel, or Next.js App Directory / API routes), every API route can run in its own isolated execution context.
+If you do: import mongoose, { Schema, model, models } from "mongoose"
+
+in multiple files — those are separate instances of mongoose’s model registry per import scope.
+
+So when:
+
+One file registers User to its mongoose instance
+
+And another file tries .populate("authorId") from its own different mongoose instance
+→ That instance won’t know the User model → leading to your exact error:  MissingSchemaError: Schema hasn't been registered for model "User".
+
+*/
+import mongoose from "@/lib/db.lib";
+import { Schema, model, models } from "mongoose"
 import { IUser } from "@/types/User.types";
 import bcrypt from "bcryptjs";
-import { model, models, Schema } from "mongoose";
-
-
 
 const userSchema = new Schema<IUser>({
     email: {
@@ -62,16 +75,6 @@ userSchema.methods.validatePassword = async function (inputPassword: string): Pr
     return await bcrypt.compare(inputPassword, this.password);
 }
 
-// for hot reload
-clearModelCache("User")
 const User = models?.User || model<IUser>("User", userSchema)
 
 export default User;
-
-
-/***************************** USER SCHEMA SUMMARY *****************************
-1. Defined a TypeScript interface IUser with all required fields.
-2. Used that interface to create a strongly-typed Mongoose schema.
-3. Added password hashing in pre-save hook.
-4. Prevented re-registering the model with Mongoose during hot reload (Next.js dev mode).
-********************************************************************************/
