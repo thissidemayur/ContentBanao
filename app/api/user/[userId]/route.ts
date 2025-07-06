@@ -97,43 +97,4 @@ export async function GET(req: NextRequest) {
     }
 }
 
-// Delete account:
-export async function DELETE(req: NextRequest) {
-
-    const { password } = await req.json()
-    const url = req.nextUrl
-    const userId = url.pathname.split("/").pop()
-    if (!password) return NextResponse.json(
-        { message: "Password field is empty" },
-        { status: 400 }
-    )
-
-    const session = await getServerSession(authOptions)
-    console.log("session in delete: ", session)
-
-    if (!session || session.user.id !== userId) {
-        return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
-    }
-    try {
-
-        await connectToDB()
-
-        const user = await User.findOne({ userName: session?.user.id })
-
-        const isPasswordValid = await user.validatePassword(password)
-        if (!isPasswordValid) {
-            return NextResponse.json({ message: 'Incorrect password' }, { status: 401 });
-        }
-
-        await user.deleteOne()
-
-        return NextResponse.json({ message: 'User deleted successfully ', data: {} }, { status: 201 });
-
-
-    } catch (error) {
-        console.error("error ocurr while deleting account: ", error)
-        throw error
-    }
-
-}
 
