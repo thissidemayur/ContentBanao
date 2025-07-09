@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'; //use 
 
 export const authApi = createApi({
     reducerPath: "authApi",
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3001/api/' }),
+    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/api/' }),
     tagTypes: ['User'],
 
     endpoints: (builder) => ({
@@ -41,22 +41,22 @@ export const authApi = createApi({
         }),
 
         // update-password
-        updatePassword: builder.mutation<void, IUser>({
-            query: (data) => ({
+        updatePassword: builder.mutation<void, { oldPassword: string, newPassword: string }>({
+            query: ({ oldPassword, newPassword }) => ({
                 url: "user/update-password",
                 method: "PATCH",
-                body: data
+                body: { newPassword, oldPassword }
             }),
             invalidatesTags: ['User'],
 
         }),
 
-        // updateProfile
-        updateProfile: builder.mutation<void, IUser>({
-            query: (data) => ({
+        // updateProfile.
+        updateProfile: builder.mutation<IUser, { userName: string, firstName: string, lastName: string, email: string, bio: string, avatar: string }>({
+            query: ({ userName, firstName, lastName, email, bio, avatar }) => ({
                 method: "PATCH",
                 url: "user/update-profile",
-                body: data
+                body: { userName, firstName, lastName, email, bio, avatar }
             }),
             invalidatesTags: ['User'],
 
@@ -86,11 +86,20 @@ export const authApi = createApi({
 
         // get user
         getUser: builder.query<IUser, string>({
-            query: (id) => `/user/${id}`,
+            query: (id) => `user/${id}`,
             providesTags: ['User'],
 
-        })
+        }),
 
+        // delete user
+        deleteUser: builder.mutation<void, { password: string }>({
+            query: ({ password }) => ({
+                method: "DELETE",
+                url: `user/delete-account`,
+                body: { password }
+
+            })
+        })
     })
 })
 export const {
@@ -101,5 +110,6 @@ export const {
     useUpdateProfileMutation,
     useUploadAvtarMutation,
     useUpdateAvtarMutation,
-    useGetUserQuery
+    useGetUserQuery,
+    useDeleteUserMutation
 } = authApi;
