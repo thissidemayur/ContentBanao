@@ -1,31 +1,33 @@
 "use client";
 
 import { Lock, Trash2, AlertTriangle } from "lucide-react";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useDeleteUserMutation } from "@/features/auth/authApi";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { logout } from "@/features/auth/authSlice";
 
+type FormValues = {
+  password: string;
+};
+
 export default function DeleteAccount() {
   const dispatch = useDispatch();
-  const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const router = useRouter();
   const [deleteAccount, { error, isSuccess, isLoading }] =
     useDeleteUserMutation();
-  const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<FormValues>();
 
-    if (!password) {
-      setErrorMsg("Password is required to delete your account");
-      return;
-    }
-
+  const onSubmit = async (data: FormValues) => {
     try {
-      await deleteAccount({ password });
-      setPassword("");
+      await deleteAccount({ password: data.password }).unwrap();
+      reset();
       dispatch(logout());
       router.push("/");
     } catch (err) {
@@ -36,6 +38,7 @@ export default function DeleteAccount() {
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-8 flex items-center justify-center">
       <div className="max-w-md w-full mx-auto bg-white border border-gray-200 rounded-2xl shadow-xl p-6 sm:p-8 transition-all duration-300">
+        {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-5">
             <AlertTriangle size={32} className="text-red-600" />
@@ -50,37 +53,36 @@ export default function DeleteAccount() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Form */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           {/* Password Field */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
-            <div
-              className="flex items-center border border-gray-300 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-red-500 transition"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  const input = e.currentTarget.querySelector("input");
-                  if (input) (input as HTMLInputElement).focus();
-                }
-              }}
-            >
+            <div className="flex items-center border border-gray-300 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-red-500 transition">
               <Lock size={18} className="text-gray-400 mr-2" />
               <input
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                })}
                 className="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400"
               />
             </div>
-            {errorMsg && (
-              <p className="text-xs text-red-500 mt-1">{errorMsg}</p>
+            {errors.password && (
+              <p className="text-xs text-red-500 mt-1">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
-          {/* Warning Message */}
+          {/* Warning */}
           <div className="flex items-start gap-3 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
             <Trash2 size={20} className="text-yellow-600 flex-shrink-0 mt-1" />
             <p className="text-sm text-yellow-700 leading-relaxed">
@@ -109,7 +111,7 @@ export default function DeleteAccount() {
             </button>
           </div>
 
-          {/* Status Messages */}
+          {/* Status */}
           {isSuccess && (
             <p className="bg-green-50 border border-green-300 text-green-700 text-sm p-3 rounded-md">
               Account deleted successfully.
