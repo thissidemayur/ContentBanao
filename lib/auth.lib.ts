@@ -17,6 +17,7 @@ export const authOptions: NextAuthOptions = {
             credentials: {
                 email: { label: "Email", type: "text", placeholder: "you@example.com" },
                 password: { label: "Password", type: "password", placeholder: "********" }
+
             },
 
             // Step 1.1: Authorize function runs ONLY for credential provider (not for Google etc.)
@@ -38,6 +39,9 @@ export const authOptions: NextAuthOptions = {
                     return {
                         id: user._id.toString(),
                         email: user.email,
+                        userName: user.userName,
+                        avatar: user.avatar,
+                        bio: user.bio,
                     };
                 } catch (error) {
                     console.error("Auth Error: ", error);
@@ -53,6 +57,10 @@ export const authOptions: NextAuthOptions = {
         async jwt({ token, user }) {
             if (user) {
                 token.id = user.id; // attach user ID to JWT
+                token.userName = user.userName;
+                token.avatar = user.avatar;
+                token.bio = user.bio
+
             }
             return token;
         },
@@ -61,6 +69,9 @@ export const authOptions: NextAuthOptions = {
         async session({ session, token }) {
             if (session?.user) {
                 session.user.id = token.id as string;
+                session.user.userName = token.userName;
+                session.user.avatar = token.avatar;
+                session.user.bio = token.bio
             }
             return session;
         }
