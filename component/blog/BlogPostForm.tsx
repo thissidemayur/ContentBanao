@@ -1,0 +1,250 @@
+"use client";
+
+import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
+import React, { useState } from "react";
+import { useCreateBlogMutation } from "@/features/blogs/blogsApi";
+import ImageUpload from "@/component/upload/ImageUpload";
+import { useRouter } from "next/navigation";
+import {
+  Controller,
+  FieldError,
+  FieldErrors,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
+import { toast } from "sonner";
+
+interface IFormInput {
+  title: string;
+  summary: string;
+  content: string;
+  tags: string[];
+  image: string;
+}
+
+export default function BlogPostForm() {
+  const [addBlog, { isLoading, isSuccess, error }] = useCreateBlogMutation();
+
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+    watch,
+    control,
+    reset,
+  } = useForm<IFormInput>({
+    defaultValues: {
+      title: "",
+      summary: "",
+      content: "",
+      tags: [],
+      image: "image",
+    },
+  });
+
+  // save draft (in rtk)  ;; in future not now
+  const saveDraft = () => {};
+
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    console.log("value: ");
+
+    try {
+      await addBlog({
+        title: data.title,
+        summary: data.summary,
+        content: data.content,
+        image: data.image,
+        tags: data.tags,
+      }).unwrap();
+
+      toast.success("✅ Blog posted successfully!");
+      reset(); // from react-hook-form
+
+      router.push(`/blog`);
+    } catch (err) {
+      toast.error("❌ Blog post failed");
+      console.error("❌ Blog post failed", err);
+    }
+  };
+
+  const tags = watch("tags");
+
+  const handleTagInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && e.currentTarget.value.trim()) {
+      e.preventDefault();
+      const newTag = e.currentTarget.value.trim();
+      if (tags.includes(newTag)) {
+        toast.error("Duplicate tags not allowed");
+        return;
+      }
+      const updatedTags = [...(tags || []), newTag];
+      setValue("tags", updatedTags);
+      e.currentTarget.value = "";
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    const updatedTags = (tags || []).filter((tag) => tag !== tagToRemove);
+    setValue("tags", updatedTags);
+  };
+
+  const onError = (errors: FieldErrors) => {
+    if (errors.title) {
+      toast.error("📝 Title is required!");
+    }
+    if (errors.summary) {
+      toast.error("📝 Summary is required!");
+    }
+    if (errors.content) {
+      toast.error("✍️ Content cannot be empty.");
+    }
+  };
+  return (
+    <form onSubmit={handleSubmit(onSubmit, onError)}>
+      <div className="w-full max-w-7xl mx-auto bg-gray-50 flex flex-col md:flex-row p-4 md:p-6 gap-8">
+        {/* Left Content Area */}
+        <div className="w-full max-w-7xl mx-auto md:w-3/4 space-y-8">
+          {/* Title */}
+          <div>
+            <label
+              htmlFor="title"
+              className="block text-lg font-semibold text-gray-800 mb-2"
+            >
+              📌 Post Title
+            </label>
+            <input
+              id="title"
+              type="text"
+              {...register("title", { required: true })}
+              placeholder="Enter your blog post title"
+              className="w-full max-w-7xl mx-auto border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-cyan-500 transition"
+            />
+          </div>
+
+          {/* Summary */}
+          <div>
+            <label
+              htmlFor="summary"
+              className="block text-lg font-semibold text-gray-800 mb-2"
+            >
+              📝 Short Summary
+            </label>
+            <input
+              id="summary"
+              type="text"
+              {...register("summary", { required: true })}
+              placeholder="A quick description for your post"
+              className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-cyan-500 transition"
+            />
+          </div>
+
+          {/* Tags */}
+          <div>
+            <label
+              htmlFor="tags"
+              className="block text-lg font-semibold text-gray-800 mb-2"
+            >
+              🏷️ Tags (press Enter to add)
+            </label>
+            <input
+              id="tags"
+              type="text"
+              onKeyDown={handleTagInput}
+              className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-cyan-500 transition"
+            />
+
+            {tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-3">
+                {tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="flex items-center bg-gray-200 text-sm px-3 py-1 rounded-full"
+                  >
+                    {tag}
+                    <button
+                      type="button"
+                      onClick={() => removeTag(tag)}
+                      className="ml-2 text-gray-600 hover:text-red-500"
+                    >
+                      ✖
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Rich Text Editor */}
+          <div>
+            <label className="block text-lg font-semibold text-gray-800 mb-2">
+              ✍️ Post Content
+            </label>
+            <div className="border border-gray-300 rounded-lg p-2 bg-white max-h-[300px] overflow-y-auto">
+              <Controller
+                control={control}
+                name="content"
+                rules={{ required: true }}
+                render={({ field: { onChange, value } }) => (
+                  <SimpleEditor onChange={onChange} value={value} />
+                )}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Right Sidebar */}
+        <div className="w-full max-w-7xl mx-auto md:w-1/4 space-y-8">
+          <div className="border border-dashed border-neutral-300 rounded-lg p-4 bg-white shadow-sm">
+            <h3 className="text-md font-semibold text-gray-800 mb-3">
+              🖼️ Cover Image
+            </h3>
+            <ImageUpload onSuccess={(res) => setValue("image", res.url)} />
+            {watch("image") && (
+              <div className="w-full max-w-7xl mx-auto mt-4">
+                <img
+                  src={watch("image")}
+                  alt="Uploaded"
+                  className="rounded shadow w-full h-auto object-cover"
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Feedback */}
+
+      {/* Sticky Footer */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
+        <div className="w-full max-w-7xl mx-autoflex flex-col md:flex-row justify-between items-center p-4 gap-4 shadow-sm">
+          <p className="text-gray-600 text-sm">
+            💾 Don’t forget to save your changes!
+          </p>
+          <div className="flex gap-3w-full max-w-7xl mx-auto md:w-auto">
+            <button
+              type="button"
+              onClick={saveDraft}
+              className="flex-1 md:flex-none bg-gray-100 text-gray-800 font-medium py-2 px-5 rounded-lg hover:bg-gray-200 transition"
+            >
+              💾 Save as Draft
+            </button>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`flex-1 md:flex-none ${
+                isLoading
+                  ? "bg-cyan-300 cursor-not-allowed"
+                  : "bg-cyan-600 hover:bg-cyan-700"
+              } text-white font-medium py-2 px-5 rounded-lg transition`}
+            >
+              🚀 {isLoading ? "Publishing..." : "Publish Post"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  );
+}
