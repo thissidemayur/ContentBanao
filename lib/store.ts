@@ -5,6 +5,7 @@ import blogsReducer from '@/features/blogs/blogsSlice'
 import authReducer from '@/features/auth/authSlice'
 import { commentsApi } from '@/features/comments/commentsApi'
 import { setupListeners } from '@reduxjs/toolkit/query'
+import { reelApi } from '@/features/reels/reelsApi'
 export const makeStore = () => {
     return configureStore({
         reducer: {
@@ -12,8 +13,9 @@ export const makeStore = () => {
             [blogsApi.reducerPath]: blogsApi.reducer,
             [authApi.reducerPath]: authApi.reducer,
             [commentsApi.reducerPath]: commentsApi.reducer,
+            [reelApi.reducerPath]: reelApi.reducer,
 
-            // statemanagent
+            // state-managent
             blogs: blogsReducer,
             auth: authReducer
 
@@ -23,6 +25,7 @@ export const makeStore = () => {
                 .concat(blogsApi.middleware)
                 .concat(authApi.middleware)
                 .concat(commentsApi.middleware)
+                .concat(reelApi.middleware)
     })
 }
 const store = makeStore()

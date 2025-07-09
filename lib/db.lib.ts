@@ -38,9 +38,11 @@ export async function connectToDB() {
         throw new Error("Error while resolving Promise at Database connection ")
     }
     return cached.conn
-
-
 }
+
+export default mongoose;
+
+
 /**************** DATABASE CONNECTION ARCHITECTURE & WHY WE CACHE IN NEXT.JS *****************
 
 1. Next.js doesn't use a single persistent backend server like traditional MERN apps. 
