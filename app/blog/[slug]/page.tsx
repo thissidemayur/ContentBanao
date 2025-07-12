@@ -1,6 +1,6 @@
 import BlogPage from "@/component/blog/BlogPage";
 import RecentPosts from "@/component/blog/BlogRecent";
-import CommentForm from "@/component/CommentForm";
+import CommentForm from "@/component/comment/CommentForm";
 import CommentList from "@/component/CommentList";
 import React from "react";
 
