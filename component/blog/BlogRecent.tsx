@@ -38,7 +38,7 @@ const RecentPosts = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || "Failed to fetch blogs");
+        throw new Error("Failed to fetch blogs");
       }
 
       setPosts(data.posts);

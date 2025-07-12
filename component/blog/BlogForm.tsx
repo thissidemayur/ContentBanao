@@ -1,20 +1,13 @@
 "use client";
 
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
-import React, { useState } from "react";
-import { useCreateBlogMutation } from "@/features/blogs/blogsApi";
+import React, { useEffect } from "react";
 import ImageUpload from "@/component/upload/ImageUpload";
-import { useRouter } from "next/navigation";
-import {
-  Controller,
-  FieldError,
-  FieldErrors,
-  SubmitHandler,
-  useForm,
-} from "react-hook-form";
+import { Controller, FieldErrors, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useDispatch } from "react-redux";
 
-interface IFormInput {
+export interface BlogFormValues {
   title: string;
   summary: string;
   content: string;
@@ -22,51 +15,55 @@ interface IFormInput {
   image: string;
 }
 
-export default function BlogPostForm() {
-  const [addBlog, { isLoading, isSuccess, error }] = useCreateBlogMutation();
+interface prop {
+  mode: "create" | "edit";
+  initialData?: any;
+  isSubmitting?: boolean;
+  onSubmit: (data: BlogFormValues) => void;
+}
 
-  const router = useRouter();
+export default function BlogForm({
+  mode,
+  initialData,
+  isSubmitting,
+  onSubmit,
+}: prop) {
+  const dispatch = useDispatch();
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-    watch,
-    control,
-    reset,
-  } = useForm<IFormInput>({
-    defaultValues: {
-      title: "",
-      summary: "",
-      content: "",
-      tags: [],
-      image: "image",
-    },
-  });
+  const { register, handleSubmit, setValue, watch, getValues, control, reset } =
+    useForm<BlogFormValues>({
+      defaultValues: {
+        title: "",
+        summary: "",
+        content: "",
+        tags: [],
+        image: "",
+      },
+    });
 
-  // save draft (in rtk)  ;; in future not now
-  const saveDraft = () => {};
+  // ✅ Restore from localStorage for create
+  useEffect(() => {
+    if (mode === "create") {
+      const storedDraft = localStorage.getItem("blog-draft");
+      if (storedDraft) {
+        const parsed = JSON.parse(storedDraft);
+        reset(parsed);
+      }
+    }
+  }, [mode, reset]);
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    console.log("value: ");
+  // ✅ Set initial data for edit
+  useEffect(() => {
+    if (mode === "edit" && initialData) {
+      reset(initialData);
+    }
+  }, [mode, reset, initialData]);
 
-    try {
-      await addBlog({
-        title: data.title,
-        summary: data.summary,
-        content: data.content,
-        image: data.image,
-        tags: data.tags,
-      }).unwrap();
-
-      toast.success("✅ Blog posted successfully!");
-      reset(); // from react-hook-form
-
-      router.push(`/blog`);
-    } catch (err) {
-      toast.error("❌ Blog post failed");
-      console.error("❌ Blog post failed", err);
+  const saveDraft = () => {
+    const data = getValues();
+    if (data) {
+      localStorage.setItem("blog-draft", JSON.stringify(data));
+      toast.success("💾 Draft saved successfully!");
     }
   };
 
@@ -92,16 +89,11 @@ export default function BlogPostForm() {
   };
 
   const onError = (errors: FieldErrors) => {
-    if (errors.title) {
-      toast.error("📝 Title is required!");
-    }
-    if (errors.summary) {
-      toast.error("📝 Summary is required!");
-    }
-    if (errors.content) {
-      toast.error("✍️ Content cannot be empty.");
-    }
+    if (errors.title) toast.error("📝 Title is required!");
+    if (errors.summary) toast.error("📝 Summary is required!");
+    if (errors.content) toast.error("✍️ Content cannot be empty.");
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit, onError)}>
       <div className="w-full max-w-7xl mx-auto bg-gray-50 flex flex-col md:flex-row p-4 md:p-6 gap-8">
@@ -188,7 +180,12 @@ export default function BlogPostForm() {
                 name="content"
                 rules={{ required: true }}
                 render={({ field: { onChange, value } }) => (
-                  <SimpleEditor onChange={onChange} value={value} />
+                  <SimpleEditor
+                    value={value}
+                    onChange={(html) => {
+                      onChange(html); // <-- updates RHF value live
+                    }}
+                  />
                 )}
               />
             </div>
@@ -233,14 +230,14 @@ export default function BlogPostForm() {
             </button>
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isSubmitting}
               className={`flex-1 md:flex-none ${
-                isLoading
+                isSubmitting
                   ? "bg-cyan-300 cursor-not-allowed"
                   : "bg-cyan-600 hover:bg-cyan-700"
               } text-white font-medium py-2 px-5 rounded-lg transition`}
             >
-              🚀 {isLoading ? "Publishing..." : "Publish Post"}
+              {mode === "create" ? "Publish" : "Update"}
             </button>
           </div>
         </div>

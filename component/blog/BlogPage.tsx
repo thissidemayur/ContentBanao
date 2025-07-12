@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import sanitizeHtml from "sanitize-html";
 import { useAuth } from "@/hooks/userAuth";
 import LikeButton from "../LikeButton";
-import CommentForm from "../CommentForm";
+import CommentForm from "../comment/CommentForm";
 import CommentList from "../CommentList";
 import { toast } from "sonner";
 import { getValidImageSrc } from "@/lib/Backend-helperFn";
@@ -43,7 +43,6 @@ export default function BlogPage({ slug }: Props) {
   }
 
   const blog = post.data;
-  console.log("blog: ", blog);
   const sanitizedContent = sanitizeHtml(blog.content || "", {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([
       "img",
@@ -78,14 +77,12 @@ export default function BlogPage({ slug }: Props) {
     }
   };
 
-  const handleCommentAdded = () => {
-    console.log("Comment added — auto-refresh handled by invalidatesTags");
-  };
+  const handleCommentAdded = () => {};
   const handleEdit = () => {
     toast("Edit mode enabled ✏️", {
       description: "You can now make changes to your post.",
     });
-    // Optional: Set your state to editable here if you need
+    router.push(`/edit-blog?id=${blog.slug}`);
   };
 
   const userId = userAuth?.id;
