@@ -7,15 +7,27 @@ import { JWT } from "next-auth/jwt";
 declare module "next-auth" {
   interface Session {
     user: {
-
+      email: string,
       id: string,
       userName?: string | mongoose.Types.ObjectId
+      avatar?: string
+      bio?: string
+      lastName?: string
+      firstName?: string
+
+
     } & DefaultSession["user"] // includes name, email, image
   }
 
   interface User extends DefaultUser {
     id: string;
     userName?: string;
+    avatar?: string
+    email: string
+    bio?: string
+    lastName?: string
+    firstName?: string
+
   }
 }
 
@@ -25,6 +37,12 @@ declare module "next-auth/jwt" {
   interface JWT {
     id: string;
     userName: string | mongoose.Types.ObjectId
+    avatar?: string
+    email: string
+    bio?: string
+    lastName?: string
+    firstName?: string
+
   }
 }
 

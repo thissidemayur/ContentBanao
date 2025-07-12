@@ -9,7 +9,7 @@ export interface IUser {
 
     avatar?: string;
     bio?: string
-    userName: string | mongoose.Types.ObjectId,
+    userName?: string,
     firstName?: string,
     lastName?: string
 }
