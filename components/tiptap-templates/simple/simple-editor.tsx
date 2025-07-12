@@ -184,15 +184,6 @@ export function SimpleEditor({ value, onChange }: SimpleEditorProps) {
   const toolbarRef = React.useRef<HTMLDivElement>(null);
 
   const editor = useEditor({
-    immediatelyRender: false,
-    editorProps: {
-      attributes: {
-        autocomplete: "off",
-        autocorrect: "off",
-        autocapitalize: "off",
-        "aria-label": "Main content area, start typing to enter text.",
-      },
-    },
     extensions: [
       StarterKit,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
@@ -204,7 +195,6 @@ export function SimpleEditor({ value, onChange }: SimpleEditorProps) {
       Typography,
       Superscript,
       Subscript,
-
       Selection,
       ImageUploadNode.configure({
         accept: "image/*",
@@ -216,11 +206,26 @@ export function SimpleEditor({ value, onChange }: SimpleEditorProps) {
       TrailingNode,
       Link.configure({ openOnClick: false }),
     ],
+    editorProps: {
+      attributes: {
+        autocomplete: "off",
+        autocorrect: "off",
+        autocapitalize: "off",
+        "aria-label": "Main content area, start typing to enter text.",
+      },
+    },
+    content: value, // initial content on mount
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
-    content: "",
   });
+
+  // 👌 Synchronize editor content when value changes from outside (like reset or initialData)
+  React.useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value || "", false);
+    }
+  }, [value, editor]);
 
   const bodyRect = useCursorVisibility({
     editor,
@@ -232,6 +237,8 @@ export function SimpleEditor({ value, onChange }: SimpleEditorProps) {
       setMobileView("main");
     }
   }, [isMobile, mobileView]);
+
+  if (!editor) return null;
 
   return (
     <EditorContext.Provider value={{ editor }}>
