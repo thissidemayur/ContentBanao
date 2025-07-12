@@ -47,10 +47,9 @@ export async function GET(req: NextRequest) {
 
         await connectToDB()
         // Now User model is loaded, so .populate("authorId") will work
-        const comments = await Comment.find({ blogId }).sort({ createdAt: -1 })
+        const comments = await Comment.find({ blogId }).sort({ createdAt: -1 }).populate("authorId", "userName avatar").exec()
         if (!comments) return NextResponse.json({ message: "No comment yet" }, { status: 400 });
 
-        console.log("comments: ", comments)
         return NextResponse.json({ message: "comment retrieved successfully ", data: comments }, { status: 200 });
     } catch (error) {
         console.error("error while reteriving comments: ", error)

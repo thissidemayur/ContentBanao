@@ -14,7 +14,6 @@ export async function DELETE(req: NextRequest) {
     const { pathname } = req.nextUrl
     const id = pathname.split("/").pop()
     if (!id) return NextResponse.json({ message: "Missing comment Id" }, { status: 400 });
-    console.log("commentId: ", id)
 
     try {
         await connectToDB()
