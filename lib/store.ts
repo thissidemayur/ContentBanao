@@ -1,35 +1,46 @@
 import { authApi } from '@/features/auth/authApi'
 import { blogsApi } from '@/features/blogs/blogsApi'
 import { configureStore } from '@reduxjs/toolkit'
-import blogsReducer from '@/features/blogs/blogsSlice'
 import authReducer from '@/features/auth/authSlice'
 import { commentsApi } from '@/features/comments/commentsApi'
-import { setupListeners } from '@reduxjs/toolkit/query'
 import { reelApi } from '@/features/reels/reelsApi'
-export const makeStore = () => {
-    return configureStore({
-        reducer: {
-            // api rqst handling
-            [blogsApi.reducerPath]: blogsApi.reducer,
-            [authApi.reducerPath]: authApi.reducer,
-            [commentsApi.reducerPath]: commentsApi.reducer,
-            [reelApi.reducerPath]: reelApi.reducer,
+import storage from 'redux-persist/lib/storage';
+import { combineReducers } from 'redux';
+import { persistReducer, persistStore } from 'redux-persist';
 
-            // state-managent
-            blogs: blogsReducer,
-            auth: authReducer
+const persistConfig = {
+    key: "root",
+    storage,
+    whitelist: ['auth'],  // only persist the auth slice
 
-        },
-        middleware: (getDefaultMiddleware) =>
-            getDefaultMiddleware()
-                .concat(blogsApi.middleware)
-                .concat(authApi.middleware)
-                .concat(commentsApi.middleware)
-                .concat(reelApi.middleware)
-    })
 }
+const rootReducer = combineReducers({
+    auth: authReducer,
+    [blogsApi.reducerPath]: blogsApi.reducer,
+    [authApi.reducerPath]: authApi.reducer,
+    [commentsApi.reducerPath]: commentsApi.reducer,
+    [reelApi.reducerPath]: reelApi.reducer,
+})
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+
+export const makeStore = () =>
+    configureStore({
+        reducer: persistedReducer,
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware({
+                serializableCheck: false,
+            })
+                .concat(authApi.middleware)
+                .concat(blogsApi.middleware)
+                .concat(commentsApi.middleware)
+                .concat(reelApi.middleware),
+    })
+
+// export persistor for PersistGate
 const store = makeStore()
-setupListeners(store.dispatch) //refetchOnFocus / refetchOnReconnect behaviors
+export const persistor = persistStore(store)
 
 // Infer the type of makeStore
 export type AppStore = ReturnType<typeof makeStore>
@@ -37,4 +48,3 @@ export type AppStore = ReturnType<typeof makeStore>
 export type RootState = ReturnType<AppStore['getState']>
 export type AppDispatch = AppStore['dispatch']
 
-// why we are using HOF for store in ts but not in js why ? whats the secreat of it
