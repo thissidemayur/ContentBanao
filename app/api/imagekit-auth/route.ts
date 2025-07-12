@@ -1,12 +1,13 @@
 import { getUploadAuthParams } from "@imagekit/next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth.lib" // adjust path as per your setup
+import { NextResponse } from "next/server"
 
 export async function GET() {
     const session = await getServerSession(authOptions)
 
     if (!session) {
-        return new Response(
+        return new NextResponse(
             JSON.stringify({ error: "Unauthorized" }),
             { status: 401 }
         )
@@ -18,7 +19,7 @@ export async function GET() {
             publicKey: process.env.NEXT_AUTH_IMAGEKIT_PUBLIC_KEY as string,
         })
 
-        return Response.json(
+        return NextResponse.json(
             {
                 token,
                 expire: Number(expire),
@@ -28,11 +29,8 @@ export async function GET() {
             { status: 200 }
         )
 
-    } catch (error) {
-        console.error("Imagekit authentication failed ::imagekit-auth= ", error)
-        return Response.json(
-            { error: "video uploading Authentication failed" },
-            { status: 500 }
-        )
+    } catch {
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+
     }
 }

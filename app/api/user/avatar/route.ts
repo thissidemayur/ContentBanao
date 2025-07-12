@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
         )
 
 
-    } catch (error) {
+    } catch {
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }
@@ -93,7 +93,7 @@ export async function PUT(req: NextRequest) {
         )
 
 
-    } catch (error) {
+    } catch {
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }
@@ -138,7 +138,7 @@ export async function DELETE(req: NextRequest) {
         )
 
 
-    } catch (error) {
+    } catch {
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }

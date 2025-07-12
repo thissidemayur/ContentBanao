@@ -52,8 +52,7 @@ export async function PATCH(req: NextRequest) {
             { message: "User data updated successfully", data: user },
             { status: 200 }
         )
-    } catch (error) {
-        console.error("Error while updating user: ", error)
+    } catch {
         return NextResponse.json(
             { error: "Internal Server Error" },
             { status: 500 }

@@ -18,7 +18,7 @@ export default function CreatePostPage() {
       setTimeout(() => {
         router.push("/blog");
       }, 1000);
-    } catch (error) {
+    } catch {
       toast.error("❌ Failed to create blog");
     }
   };

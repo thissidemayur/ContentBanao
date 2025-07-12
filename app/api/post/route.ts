@@ -1,4 +1,3 @@
-import { blogsApi } from "@/features/blogs/blogsApi";
 import { authOptions } from "@/lib/auth.lib";
 import { connectToDB } from "@/lib/db.lib";
 import Blog from "@/model/blog.model";
@@ -42,9 +41,9 @@ export async function GET(req: NextRequest) {
             },
             { status: 200 }
         )
-    } catch (error) {
-        console.error("error whiling fetching BLOG: ", error)
-        throw error
+    } catch {
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+
     }
 
 }
@@ -52,12 +51,12 @@ export async function GET(req: NextRequest) {
 
 // POST: api/post  ; create post
 export async function POST(req: NextRequest) {
-    let {
+    const {
         title, description, content, summary, image, tags, isPublished
     } = await req.json()
 
     // validation check for required field
-    let requiredField = [title, description, content, image, tags]
+    const requiredField = [title, description, content, image, tags]
 
     const fieldName = ["title", "description", "content", "image", "tags"]
     const session = await getServerSession(authOptions)
@@ -100,10 +99,8 @@ export async function POST(req: NextRequest) {
                 status: 201
             }
         )
-    } catch (error) {
-        return NextResponse.json(
-            { error: "Error while creating a blog, please try after sometime" },
-            { status: 400 }
-        )
+    } catch {
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+
     }
 }

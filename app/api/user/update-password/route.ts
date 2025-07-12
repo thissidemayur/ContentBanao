@@ -60,11 +60,8 @@ export async function PATCH(req: NextRequest) {
             { message: "Password updated successfully" },
             { status: 200 }
         );
-    } catch (error) {
-        console.error("Error updating password:", error);
-        return NextResponse.json(
-            { error: "Internal Server Error" },
-            { status: 500 }
-        );
+    } catch {
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+
     }
 }

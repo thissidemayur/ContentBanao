@@ -8,13 +8,12 @@ import { NextRequest, NextResponse } from "next/server"
 export async function POST(req: NextRequest) {
 
     const token = await getToken({ req })
-    if (!token) return NextResponse.json({ message: "Missing blog Id" }, { status: 400 });
+    if (!token) return NextResponse.json({ error: "Missing blog Id" }, { status: 400 });
 
 
     const { blogId, content } = await req.json()
-    if (!blogId || !content) return NextResponse.json({ message: "Missing content or blogId" }, { status: 400 });
+    if (!blogId || !content) return NextResponse.json({ error: "Missing content or blogId" }, { status: 400 });
 
-    console.timeLog("blogId: ", blogId, " content: ", content)
     try {
         await connectToDB()
         const comment = await Comment.create({
@@ -27,9 +26,8 @@ export async function POST(req: NextRequest) {
         if (!comment) return NextResponse.json({ message: "comment not created!" }, { status: 400 });
 
         return NextResponse.json({ message: "comment added successsfully!", data: comment }, { status: 200 });
-    } catch (error) {
-        console.error("error while creating message: ", error)
-        throw error
+    } catch {
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
 
@@ -50,8 +48,8 @@ export async function GET(req: NextRequest) {
         if (!comments) return NextResponse.json({ message: "No comment yet" }, { status: 400 });
 
         return NextResponse.json({ message: "comment retrieved successfully ", data: comments }, { status: 200 });
-    } catch (error) {
-        console.error("error while reteriving comments: ", error)
-        throw error
+    } catch {
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+
     }
 }

@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
             { message: "User found successfully", data: user },
             { status: 200 }
         )
-    } catch (error) {
+    } catch {
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }

@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
             { status: 200 }
         )
 
-    } catch (error) {
+    } catch {
         return NextResponse.json(
             { error: "Internall server error", },
             { status: 500 }
@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
             { message: "reel created successfully", data: {} },
             { status: 201 }
         )
-    } catch (error) {
+    } catch {
         return NextResponse.json(
             { error: "Internall server error", },
             { status: 500 }

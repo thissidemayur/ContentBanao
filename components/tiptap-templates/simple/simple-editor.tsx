@@ -177,7 +177,6 @@ const MobileToolbarContent = ({
 
 export function SimpleEditor({ value, onChange }: SimpleEditorProps) {
   const isMobile = useMobile();
-  const windowSize = useWindowSize();
   const [mobileView, setMobileView] = React.useState<
     "main" | "highlighter" | "link"
   >("main");
@@ -226,11 +225,6 @@ export function SimpleEditor({ value, onChange }: SimpleEditorProps) {
       editor.commands.setContent(value || "", false);
     }
   }, [value, editor]);
-
-  const bodyRect = useCursorVisibility({
-    editor,
-    overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
-  });
 
   React.useEffect(() => {
     if (!isMobile && mobileView !== "main") {
