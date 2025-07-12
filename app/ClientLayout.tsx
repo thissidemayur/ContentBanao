@@ -1,23 +1,25 @@
 // ClientLayout.tsx
-'use client';
+"use client";
 
 import { useSession } from "next-auth/react";
-import StoreProvider from "./StoreProvider";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { logout, setUser } from "@/features/auth/authSlice";
+import { useAuth } from "@/hooks/userAuth";
 
-export default function ClientLayout({ children }: { children: React.ReactNode; }) {
-
-    const { data: session } = useSession()
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        if (session?.user) {
-            dispatch(setUser(session.user))
-        } else {
-            dispatch(logout())
-        }
-    }, [session, dispatch])
-    return <StoreProvider>{children}</StoreProvider>;
+export default function ClientLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const { data: session, status } = useSession();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (status === "authenticated" && session?.user) {
+      dispatch(setUser(session.user));
+    } else if (status === "unauthenticated") {
+      dispatch(logout());
+    }
+  }, [session, dispatch]);
+  return <>{children}</>;
 }
