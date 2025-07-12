@@ -26,27 +26,24 @@ export const authOptions: NextAuthOptions = {
                     throw new Error("Missing email or password");
                 }
 
-                try {
-                    await connectToDB(); // connect to MongoDB
+                await connectToDB(); // connect to MongoDB
 
-                    const user = await User.findOne({ email: credentials.email });
-                    if (!user) throw new Error(`No user found with ${credentials.email}`);
+                const user = await User.findOne({ email: credentials.email });
+                if (!user) throw new Error(`No user found with ${credentials.email}`);
 
-                    const isValidPassword = await bcrypt.compare(credentials.password, user.password);
-                    if (!isValidPassword) throw new Error("Invalid password!");
+                const isValidPassword = await bcrypt.compare(credentials.password, user.password);
+                if (!isValidPassword) throw new Error("Invalid password!");
 
-                    // If login success, return user object (attached to token)
-                    return {
-                        id: user._id.toString(),
-                        email: user.email,
-                        userName: user.userName,
-                        avatar: user.avatar,
-                        bio: user.bio,
-                    };
-                } catch (error) {
-                    console.error("Auth Error: ", error);
-                    throw error
-                }
+                // If login success, return user object (attached to token)
+                return {
+                    id: user._id.toString(),
+                    email: user.email,
+                    userName: user.userName,
+                    avatar: user.avatar,
+                    bio: user.bio,
+                };
+
+
             }
         })
     ],
@@ -54,24 +51,40 @@ export const authOptions: NextAuthOptions = {
     // Step 2: Callbacks allow you to modify behavior at various stages
     callbacks: {
         // Called when JWT is created or updated
-        async jwt({ token, user }) {
+        async jwt({ token, user, session, trigger }) {
+
             if (user) {
                 token.id = user.id; // attach user ID to JWT
                 token.userName = user.userName;
                 token.avatar = user.avatar;
-                token.bio = user.bio
+                token.bio = user.bio;
+                token.firstName = user.firstName;
+                token.lastName = user.lastName
 
             }
+
+            if (trigger === 'update' && session) {
+                token.userName = session.userName;
+                token.avatar = session.avatar;
+                token.bio = session.bio;
+                token.firstName = session.firstName;
+                token.lastName = session.lastName;
+
+            }
+
             return token;
         },
 
         // Called when session is accessed by frontend
         async session({ session, token }) {
+
             if (session?.user) {
                 session.user.id = token.id as string;
                 session.user.userName = token.userName;
                 session.user.avatar = token.avatar;
-                session.user.bio = token.bio
+                session.user.bio = token.bio;
+                session.user.firstName = token.firstName;
+                session.user.lastName = token.lastName
             }
             return session;
         }
