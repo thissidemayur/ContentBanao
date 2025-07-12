@@ -12,7 +12,7 @@ export async function DELETE(req: NextRequest) {
     const session = await getServerSession(authOptions)
 
     if (!session) {
-        return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     try {
@@ -21,12 +21,12 @@ export async function DELETE(req: NextRequest) {
 
         const user = await User.findById(session?.user.id)
 
-        if (!user) return NextResponse.json({ message: 'user not found' }, { status: 404 })
+        if (!user) return NextResponse.json({ error: 'user not found' }, { status: 404 })
 
 
         const isPasswordValid = await user.validatePassword(password)
         if (!isPasswordValid) {
-            return NextResponse.json({ message: 'Incorrect password' }, { status: 401 });
+            return NextResponse.json({ error: 'Incorrect password' }, { status: 400 });
         }
 
         await user.deleteOne()
@@ -36,8 +36,7 @@ export async function DELETE(req: NextRequest) {
 
 
     } catch (error) {
-        console.error("error ocurr while deleting account: ", error)
-        throw error
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 
 }

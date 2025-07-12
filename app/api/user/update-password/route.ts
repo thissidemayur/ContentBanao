@@ -8,24 +8,27 @@ import bcrypt from "bcryptjs";
 // update password -> app/api/user/update-password
 export async function PATCH(req: NextRequest) {
     const { oldPassword, newPassword } = await req.json();
-
+    console.log("oldPassword: ", oldPassword, " newPassword: ", newPassword)
     if (!oldPassword || !newPassword) {
+        console.log("both are compilsary")
         return NextResponse.json(
-            { message: "Old and new passwords are required" },
+            { error: "Old and new passwords are required" },
             { status: 400 }
         );
     }
 
     if (newPassword.length < 6) {
+        console.log("Short password")
         return NextResponse.json(
-            { message: "New password must be at least 6 characters long" },
+            { error: "New password must be at least 6 characters long" },
             { status: 400 }
         );
     }
 
     const session = await getServerSession(authOptions);
     if (!session) {
-        return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        console.log("no session")
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     try {
@@ -33,8 +36,9 @@ export async function PATCH(req: NextRequest) {
 
         const user = await User.findById(session.user.id);
         if (!user) {
+            console.log("user not found")
             return NextResponse.json(
-                { message: "User not found" },
+                { error: "User not found" },
                 { status: 404 }
             );
         }
@@ -42,8 +46,9 @@ export async function PATCH(req: NextRequest) {
         // Check if old password is correct
         const isMatch = await user.validatePassword(oldPassword)
         if (!isMatch) {
+            console.log("old password is incorrect")
             return NextResponse.json(
-                { message: "Old password is incorrect" },
+                { error: "Old password is incorrect" },
                 { status: 400 }
             );
         }
@@ -59,7 +64,7 @@ export async function PATCH(req: NextRequest) {
     } catch (error) {
         console.error("Error updating password:", error);
         return NextResponse.json(
-            { message: "Internal Server Error" },
+            { error: "Internal Server Error" },
             { status: 500 }
         );
     }
