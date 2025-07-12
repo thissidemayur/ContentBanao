@@ -23,30 +23,34 @@ export async function POST(req: NextRequest) {
     password = password.trim();
 
 
-    await connectToDB(); // Ensures DB connection (and caches if already connected)
+    try {
+        await connectToDB(); // Ensures DB connection (and caches if already connected)
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return NextResponse.json(
+                { error: `User already exists with email: ${email}` },
+                { status: 401 }
+            );
+        }
+        if (password.length < 6) {
+            return NextResponse.json(
+                { error: `Password must be atleast 6 character long` },
+                { status: 400 }
+            );
+        }
+        await User.create({ email, password });
+
         return NextResponse.json(
-            { error: `User already exists with email: ${email}` },
-            { status: 401 }
+            { message: "User registered successfully!" },
+            { status: 200 }
         );
+    } catch (error) {
+        return NextResponse.json({
+            error: "Server error"
+        },
+            { status: 500 })
     }
-    if (password.length < 6) {
-        return NextResponse.json(
-            { error: `Password must be atleast 6 character long` },
-            { status: 400 }
-        );
-    }
-    await User.create({ email, password });
-
-    return NextResponse.json(
-        { message: "User registered successfully!" },
-        { status: 201 }
-    );
-
-
-
 }
 
 

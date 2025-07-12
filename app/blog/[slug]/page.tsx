@@ -1,7 +1,6 @@
 import BlogPage from "@/component/blog/BlogPage";
 import RecentPosts from "@/component/blog/BlogRecent";
-import CommentForm from "@/component/comment/CommentForm";
-import CommentList from "@/component/CommentList";
+
 import React from "react";
 
 interface Props {
@@ -10,9 +9,11 @@ interface Props {
   };
 }
 
-async function Page({ params }: Props) {
+function Page({ params }: Props) {
   // Directly await if necessary (if Next complains later)
-  const { slug } = await params;
+  console.log("Received params:", params);
+
+  const { slug } = params;
   return (
     <div>
       {/* {comment section integreated in BLogPage} */}

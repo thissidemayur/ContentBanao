@@ -4,13 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { Home, FileText, Video, PlusSquare } from "lucide-react";
+import { Menu } from "lucide-react";
 import AccountDropdown from "@/component/user/Accountdropdown";
 
 export default function MainNavbar() {
   const { data: session } = useSession();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  // Authenticated nav links
   const authLinks = [
     { label: "Home", path: "/" },
     { label: "Blogs", path: "/blog" },
@@ -19,7 +19,6 @@ export default function MainNavbar() {
     { label: "Add Reel", path: "/add-reel" },
   ];
 
-  // Guest nav links
   const guestLinks = [
     { label: "Home", path: "/" },
     { label: "Blogs", path: "/blog" },
@@ -28,6 +27,8 @@ export default function MainNavbar() {
     { label: "Register", path: "/auth/register" },
   ];
 
+  const links = session ? authLinks : guestLinks;
+
   return (
     <nav className="bg-white border-b border-gray-200">
       <div className="max-w-screen-xl mx-auto flex justify-between items-center p-4">
@@ -35,7 +36,7 @@ export default function MainNavbar() {
         <Link href="/" className="flex items-center gap-2">
           <Image
             src="https://flowbite.com/docs/images/logo.svg"
-            alt="Flowbite Logo"
+            alt="Logo"
             width={32}
             height={32}
             className="h-8 w-8"
@@ -45,22 +46,47 @@ export default function MainNavbar() {
           </span>
         </Link>
 
-        {/* Navigation */}
-        <div className="flex items-center space-x-6">
-          {(session ? authLinks : guestLinks).map(({ label, path }) => (
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center space-x-6">
+          {links.map(({ label, path }) => (
             <Link
               key={label}
               href={path}
-              className="flex items-center gap-1 text-gray-800 font-medium hover:text-blue-600 transition"
+              className="text-gray-800 font-medium hover:text-blue-600 transition"
             >
-              <span>{label}</span>
+              {label}
             </Link>
           ))}
 
-          {/* Show AccountDropdown for authenticated users */}
           {session && <AccountDropdown />}
         </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100"
+        >
+          <Menu size={24} />
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileOpen && (
+        <div className="md:hidden border-t border-gray-200 px-4 pb-4 pt-2 space-y-2 bg-white">
+          {links.map(({ label, path }) => (
+            <Link
+              key={label}
+              href={path}
+              onClick={() => setMobileOpen(false)} // close on click
+              className="block text-gray-800 font-medium hover:text-blue-600 transition"
+            >
+              {label}
+            </Link>
+          ))}
+
+          {session && <AccountDropdown />}
+        </div>
+      )}
     </nav>
   );
 }
