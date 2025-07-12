@@ -4,52 +4,49 @@ import { NextRequest, NextResponse } from "next/server"; // Next.js Fetch API eq
 
 // ✅ This route will handle POST requests to `/api/auth/register`
 export async function POST(req: NextRequest) {
-    try {
-        let { email, password } = await req.json();
+    let { email, password } = await req.json();
 
-        if (!email || !password) {
-            return NextResponse.json(
-                { error: "Both email and password are required." },
-                { status: 400 }
-            );
-        }
-
-        email = email.toLowerCase().trim();
-        if (password.length < 6) {
-            return NextResponse.json(
-                { error: "Password must be at least 6 characters long." },
-                { status: 400 }
-            );
-        }
-        password = password.trim();
-
-
-        await connectToDB(); // Ensures DB connection (and caches if already connected)
-
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return NextResponse.json(
-                { error: `User already exists with email: ${email}` },
-                { status: 400 }
-            );
-        }
-        if (password.length < 6) {
-            return NextResponse.json(
-                { error: `Password must be atleast 6 character long` },
-                { status: 400 }
-            );
-        }
-        await User.create({ email, password });
-
+    if (!email || !password) {
         return NextResponse.json(
-            { message: "User registered successfully!" },
-            { status: 201 }
+            { error: "Both email and password are required." },
+            { status: 400 }
         );
-    } catch (error) {
-
-        console.error("Error :: User registration failed: ", error);
-        throw error
     }
+
+    email = email.toLowerCase().trim();
+    if (password.length < 6) {
+        return NextResponse.json(
+            { error: "Password must be at least 6 characters long." },
+            { status: 400 }
+        );
+    }
+    password = password.trim();
+
+
+    await connectToDB(); // Ensures DB connection (and caches if already connected)
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+        return NextResponse.json(
+            { error: `User already exists with email: ${email}` },
+            { status: 401 }
+        );
+    }
+    if (password.length < 6) {
+        return NextResponse.json(
+            { error: `Password must be atleast 6 character long` },
+            { status: 400 }
+        );
+    }
+    await User.create({ email, password });
+
+    return NextResponse.json(
+        { message: "User registered successfully!" },
+        { status: 201 }
+    );
+
+
+
 }
 
 
