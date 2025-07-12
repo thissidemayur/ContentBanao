@@ -1,8 +1,9 @@
-@import 'variables';
-@import 'keyframe-animations';
+@use './variables';
+@use './keyframe-animations';
 
-body {
-  font-family: sans-serif;
-  background: #fff;
-}
+
+// body {
+//   font-family: sans-serif;
+//   background: #fff;
+// }
 

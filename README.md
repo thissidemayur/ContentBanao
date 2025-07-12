@@ -25,8 +25,7 @@ This project focuses on scalable architecture, clean UI, and real-world product-
 - 📲 Protected routes and dynamic profile pages
 - ✨ Clean toast notifications (planned for v1.1)
 - 📷 Reel Blogging (short video-style posts) module coming soon in v2
-
----
+- ***
 
 ## 🛠️ Tech Stack
 
@@ -62,6 +61,18 @@ This project focuses on scalable architecture, clean UI, and real-world product-
   /api        # Next.js API Routes (User, Auth, Blog)
   /components # Shared, Reusable Components
   /features   # RTK Slice & API features (auth, blog, etc.)
+  /hooks      # Custom React Hooks
+  /upload     # Image upload utilities
+  /profile    # Profile management pages
+  /blog       # Blog creation and details pages
+  /public     # Static assets (logo, screenshots)
+```
+
+```bash
+/api
+  /auth        # Next.js API Routes (User, Auth, Blog)
+  /post # Shared, Reusable Components
+  /   # RTK Slice & API features (auth, blog, etc.)
   /hooks      # Custom React Hooks
   /upload     # Image upload utilities
   /profile    # Profile management pages
