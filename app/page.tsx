@@ -6,6 +6,7 @@ import CTA from "@/component/CTA";
 import RecentPosts from "@/component/blog/BlogRecent";
 import AboutMayur from "@/component/About";
 import HomeBlog from "@/component/HomeBlog";
+import Footer from "@/component/Footer";
 const AnimatedTestimonials = dynamic(
   () => import("@/components/ui/animated-testimonials"),
   { ssr: false }
@@ -258,7 +259,7 @@ export default function Home() {
       {/* Testimonial */}
       <AnimatedTestimonials testimonials={testimonials} />
 
-      <AboutMayur />
+      <Footer />
     </>
   );
 }

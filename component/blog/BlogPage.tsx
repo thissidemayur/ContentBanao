@@ -10,9 +10,9 @@ import sanitizeHtml from "sanitize-html";
 import { useAuth } from "@/hooks/userAuth";
 import LikeButton from "../LikeButton";
 import CommentForm from "../comment/CommentForm";
-import CommentList from "../CommentList";
 import { toast } from "sonner";
 import { getValidImageSrc } from "@/lib/Backend-helperFn";
+import CommentList from "../comment/CommentList";
 
 interface Props {
   slug: string;

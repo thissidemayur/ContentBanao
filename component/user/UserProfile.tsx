@@ -38,7 +38,7 @@ export default function UserProfile() {
               </h2>
 
               <Link
-                href="/update-profile"
+                href="/profile/update-profile"
                 className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium rounded-full border border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white transition"
               >
                 <Edit size={16} />

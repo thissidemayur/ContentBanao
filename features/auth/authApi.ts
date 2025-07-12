@@ -15,8 +15,7 @@ export const authApi = createApi({
                 method: "POST",
                 body: { email, password }
             }),
-            invalidatesTags: (result, error, body) =>
-                result ? [{ type: "User", id: result.data._id }] : [],
+
         }),
 
         //  forget password  
