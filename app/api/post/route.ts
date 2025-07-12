@@ -24,6 +24,7 @@ export async function GET(req: NextRequest) {
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
+            .populate("authorId", "userName")
             .lean()
 
         if (!allBlogs.length) return NextResponse.json(
@@ -31,7 +32,6 @@ export async function GET(req: NextRequest) {
             { status: 404 }
         )
 
-        console.log("total blogs:: ", allBlogs)
 
         return NextResponse.json(
             {
@@ -88,8 +88,8 @@ export async function POST(req: NextRequest) {
         })
 
         if (!createBlog) return NextResponse.json(
-            { error: "Error while creating a post" },
-            { status: 500 }
+            { error: "Error while creating a blog, please try after sometime" },
+            { status: 400 }
         )
 
         return NextResponse.json(
@@ -102,7 +102,9 @@ export async function POST(req: NextRequest) {
             }
         )
     } catch (error) {
-        console.error("error while creating post:: ", error)
-        throw error
+        return NextResponse.json(
+            { error: "Error while creating a blog, please try after sometime" },
+            { status: 400 }
+        )
     }
 }
