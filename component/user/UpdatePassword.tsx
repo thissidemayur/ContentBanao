@@ -1,10 +1,11 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { useUpdatePasswordMutation } from "@/features/auth/authApi";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/userAuth";
 import { Lock } from "lucide-react";
+import { toast } from "sonner";
 
 interface PasswordFormValues {
   oldPassword: string;
@@ -31,18 +32,28 @@ export default function UpdatePasswordForm() {
     if (!userName) return alert("User not authenticated!");
 
     try {
-      await updatePassword({
+      const res = await updatePassword({
         oldPassword: data.oldPassword,
         newPassword: data.newPassword,
-        userName,
       }).unwrap();
 
       reset();
-      alert("Password updated successfully");
-      router.push("/");
-    } catch (err) {
-      console.error("Update password error:", err);
+      toast.success(res.message);
+      setTimeout(() => router.push("/"), 1000);
+    } catch (error) {
+      reset();
+      toast.error(
+        (error as any).data?.error ||
+          (error as any).message ||
+          "something unexpected error"
+      );
     }
+  };
+
+  const onError = (data: FieldErrors<PasswordFormValues>) => {
+    if (data.newPassword?.message) toast.error(data.newPassword.message);
+
+    if (data.oldPassword?.message) toast.error(data.oldPassword.message);
   };
 
   return (
@@ -53,7 +64,7 @@ export default function UpdatePasswordForm() {
         </h1>
 
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmit, onError)}
           className="bg-white border border-gray-200 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6 transition-all duration-300"
         >
           {/* Input Fields */}
@@ -74,11 +85,6 @@ export default function UpdatePasswordForm() {
                   className="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400"
                 />
               </div>
-              {errors.oldPassword && (
-                <p className="text-xs text-red-500 mt-1">
-                  {errors.oldPassword.message}
-                </p>
-              )}
             </div>
 
             {/* New Password */}
@@ -94,32 +100,16 @@ export default function UpdatePasswordForm() {
                     required: "New password is required",
                     minLength: {
                       value: 6,
-                      message: "New password must be at least 6 characters",
+                      message:
+                        "New password must be at least 6 characters long",
                     },
                   })}
                   placeholder="Enter new password"
                   className="w-full bg-transparent outline-none text-gray-800 placeholder-gray-400"
                 />
               </div>
-              {errors.newPassword && (
-                <p className="text-xs text-red-500 mt-1">
-                  {errors.newPassword.message}
-                </p>
-              )}
             </div>
           </div>
-
-          {/* Messages */}
-          {error && (
-            <div className="bg-red-50 border border-red-300 text-red-700 text-sm p-3 rounded-md">
-              {(error as any)?.data?.message || "Failed to update password."}
-            </div>
-          )}
-          {isSuccess && (
-            <div className="bg-green-50 border border-green-300 text-green-700 text-sm p-3 rounded-md">
-              Password updated successfully!
-            </div>
-          )}
 
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">

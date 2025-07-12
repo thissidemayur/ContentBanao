@@ -6,6 +6,7 @@ import { useDeleteUserMutation } from "@/features/auth/authApi";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { logout } from "@/features/auth/authSlice";
+import { toast } from "sonner";
 
 type FormValues = {
   password: string;
@@ -14,8 +15,7 @@ type FormValues = {
 export default function DeleteAccount() {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [deleteAccount, { error, isSuccess, isLoading }] =
-    useDeleteUserMutation();
+  const [deleteAccount, { error, isLoading }] = useDeleteUserMutation();
 
   const {
     register,
@@ -26,12 +26,16 @@ export default function DeleteAccount() {
 
   const onSubmit = async (data: FormValues) => {
     try {
-      await deleteAccount({ password: data.password }).unwrap();
+      const res = await deleteAccount({ password: data.password }).unwrap();
+      console.log("res: ", res);
       reset();
+      toast.success(res.message);
       dispatch(logout());
-      router.push("/");
+      setTimeout(() => {
+        router.push("/");
+      }, 1000);
     } catch (err) {
-      console.error(err);
+      toast.error((err as any).data.error);
     }
   };
 
@@ -110,18 +114,6 @@ export default function DeleteAccount() {
               Cancel
             </button>
           </div>
-
-          {/* Status */}
-          {isSuccess && (
-            <p className="bg-green-50 border border-green-300 text-green-700 text-sm p-3 rounded-md">
-              Account deleted successfully.
-            </p>
-          )}
-          {error && (
-            <p className="bg-red-50 border border-red-300 text-red-700 text-sm p-3 rounded-md">
-              {(error as any)?.data?.message}
-            </p>
-          )}
         </form>
       </div>
     </div>
