@@ -4,29 +4,19 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'; //use 
 
 export const authApi = createApi({
     reducerPath: "authApi",
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/api/' }),
+    baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_AUTH_BACKEND_BASE_URL }),
     tagTypes: ['User'],
 
     endpoints: (builder) => ({
-        register: builder.mutation<void, IUser>({
+        register: builder.mutation<void, { email: string; password: string }>({
             // query:(id)=>{}
-            query: (userDetail) => ({
+            query: ({ email, password }) => ({
                 url: "auth/register",
                 method: "POST",
-                body: userDetail
+                body: { email, password }
             }),
-            invalidatesTags: ['User']
-        }),
-
-        // login
-        login: builder.mutation<void, IUser>({
-            query: (userLogin) => ({
-                url: "auth/login",
-                method: "POST",
-                body: userLogin
-            }),
-            invalidatesTags: ['User'],
-
+            invalidatesTags: (result, error, body) =>
+                result ? [{ type: "User", id: result.data._id }] : [],
         }),
 
         //  forget password  
@@ -37,74 +27,76 @@ export const authApi = createApi({
                 body: email
             }),
             invalidatesTags: ['User'],
-
         }),
 
         // update-password
-        updatePassword: builder.mutation<void, { oldPassword: string, newPassword: string }>({
+        updatePassword: builder.mutation<{ message: string, }, { oldPassword: string, newPassword: string }>({
             query: ({ oldPassword, newPassword }) => ({
                 url: "user/update-password",
                 method: "PATCH",
                 body: { newPassword, oldPassword }
             }),
-            invalidatesTags: ['User'],
 
         }),
 
         // updateProfile.
-        updateProfile: builder.mutation<IUser, { userName: string, firstName: string, lastName: string, email: string, bio: string, avatar: string }>({
+        updateProfile: builder.mutation<{ data: IUser, message: string }, { userName: string, firstName: string, lastName: string, email: string, bio: string, avatar: string }>({
             query: ({ userName, firstName, lastName, email, bio, avatar }) => ({
                 method: "PATCH",
                 url: "user/update-profile",
                 body: { userName, firstName, lastName, email, bio, avatar }
             }),
-            invalidatesTags: ['User'],
+            invalidatesTags: (result, error, body) =>
+                result ? [{ type: "User", id: result.data._id }] : [],
+
 
         }),
 
         //upload Avtar
-        uploadAvtar: builder.mutation<void, string>({
-            query: (data) => ({
+        uploadAvtar: builder.mutation<void, { avatarUrl: string }>({
+            query: ({ avatarUrl }) => ({
                 method: "POST",
-                url: "user/upload-avtar",
-                body: data
+                url: "user/avatar",
+                body: { avatarUrl }
             }),
             invalidatesTags: ['User'],
 
         }),
 
         //update Avtar
-        updateAvtar: builder.mutation<void, string>({
-            query: (data) => ({
+        updateAvtar: builder.mutation<void, { avatarUrl: string }>({
+            query: ({ avatarUrl }) => ({
                 method: "PATCH",
-                url: "user/update-avtar",
-                body: data
+                url: "user/avatar",
+                body: avatarUrl
             }),
-            invalidatesTags: ['User'],
-
+            invalidatesTags: (result, error, body) =>
+                result ? [{ type: "User", id: result.data._id }] : [],
         }),
 
         // get user
-        getUser: builder.query<IUser, string>({
+        getUser: builder.query<{ data: IUser, message: string }, string>({
             query: (id) => `user/${id}`,
-            providesTags: ['User'],
+            providesTags: (result, error, id) =>
+                result ? [{ type: "User", id }] : [],
 
         }),
 
         // delete user
-        deleteUser: builder.mutation<void, { password: string }>({
+        deleteUser: builder.mutation<{ message: string }, { password: string }>({
             query: ({ password }) => ({
                 method: "DELETE",
                 url: `user/delete-account`,
                 body: { password }
 
-            })
+            }),
+            invalidatesTags: (result, error, body) =>
+                result ? [{ type: "User", id: result.data._id }] : [],
         })
     })
 })
 export const {
     useRegisterMutation,
-    useLoginMutation,
     useForgetPasswordMutation,
     useUpdatePasswordMutation,
     useUpdateProfileMutation,

@@ -19,7 +19,7 @@ interface responseBlog {
     title?: string,
     isPublished?: Boolean,
     summary?: string,
-    authorId?: string,
+    authorId?: { userName: string; _id: string },
     slug?: string,
     media?: imageDetail[] | [], // for image only
     tags?: string[] | [],
@@ -32,7 +32,7 @@ interface responseBlog {
 export const blogsApi = createApi({
     reducerPath: 'blogsApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'http://localhost:3000/api',
+        baseUrl: process.env.NEXT_PUBLIC_AUTH_BACKEND_BASE_URL,
         credentials: 'include'
     }),
 
@@ -48,7 +48,7 @@ export const blogsApi = createApi({
         // get blog by id
         getBlogByID: builder.query<{ message: string; data: responseBlog }, string>({
             query: (id) => `/post/${id}`,
-            providesTags: ["Blog"]
+            providesTags: (result, error, slug) => [{ type: "Blog", id: slug }],
         }),
 
         // create blog
@@ -64,9 +64,9 @@ export const blogsApi = createApi({
         }),
 
         // update blog
-        updateBlog: builder.mutation<responseBlog, { id: string, updateBlog: Partial<Blog> }>({
+        updateBlog: builder.mutation<{ message: string }, { id: string; updateBlog: Partial<Blog> }>({
             query: ({ updateBlog, id }) => ({
-                url: `/like/${id}`,
+                url: `/post/${id}`,
                 method: "PATCH",
                 body: updateBlog
             }),
@@ -79,16 +79,21 @@ export const blogsApi = createApi({
                 url: `/post/${id}`,
                 method: "DELETE"
             }),
-            invalidatesTags: ['Blog'],
+            invalidatesTags: (result, error, slug) => [{ type: "Blog", id: slug }],
         }),
 
         // like blog
-        likeBlog: builder.mutation<{ message: string, totalLikes: number, liked: boolean }, string>({
+        likeBlog: builder.mutation<{ message: string, likesCount: number, liked: boolean }, string>({
             query: (slug: string) => ({
                 url: `/post/${slug}/like`,
                 method: "POST",
             }),
-            invalidatesTags: ['Blog']
+            invalidatesTags: (result, error, slug) => [{ type: "Blog", id: slug }],
+        }),
+
+        // all blog  by its userName
+        getUserBlogs: builder.query<{ message: string, data: { blogs: responseBlog[], totalBlog: number } }, string>({
+            query: (userId: string) => `/user/blogs/${userId}/`,
         })
     })
 })
@@ -100,5 +105,6 @@ export const {
     useCreateBlogMutation,
     useUpdateBlogMutation,
     useDeleteBlogMutation,
-    useLikeBlogMutation
+    useLikeBlogMutation,
+    useGetUserBlogsQuery,
 } = blogsApi
