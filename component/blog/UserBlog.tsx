@@ -1,5 +1,5 @@
 "use client";
-
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { responseBlog, useGetUserBlogsQuery } from "@/features/blogs/blogsApi"; // your RTK query
 import Link from "next/link";
 import Image from "next/image";
@@ -9,8 +9,11 @@ import { useAuth } from "@/hooks/userAuth";
 const UserPosts = () => {
   const { userAuth } = useAuth();
   const shouldFetch = Boolean(userAuth?.userName);
+  function isFetchBaseQueryError(error: unknown): error is FetchBaseQueryError {
+    return typeof error === "object" && error !== null && "status" in error;
+  }
   const { data, isLoading, isError, error } = useGetUserBlogsQuery(
-    userAuth?.userName,
+    userAuth?.userName as string, // safely cast now because skip prevents undefined call
     {
       skip: !shouldFetch, // prevent fetch until userName is available
     }
@@ -21,6 +24,8 @@ const UserPosts = () => {
   }
 
   const blogs = data?.data.blogs;
+  const hasBlogs = blogs && blogs.length > 0;
+
   console.log("data: ", blogs?.[0].media?.[0].url);
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4">
@@ -37,7 +42,9 @@ const UserPosts = () => {
         {/* Error State */}
         {isError && (
           <p className="text-center text-red-500">
-            {error?.data.message || "Failed to load posts"}
+            {isFetchBaseQueryError(error)
+              ? (error.data as any)?.message || "Failed to load posts"
+              : "Something went wrong"}
           </p>
         )}
 
@@ -47,7 +54,7 @@ const UserPosts = () => {
         )}
 
         {/* Posts Grid */}
-        {!isLoading && !isError && blogs?.length > 0 && (
+        {!isLoading && !isError && hasBlogs && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {blogs?.map((post: responseBlog) => (
               <Link

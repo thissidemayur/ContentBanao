@@ -116,7 +116,7 @@ export default function BlogPage({ slug }: Props) {
             <LikeButton
               slug={blog.slug ?? ""}
               likes={post?.data.likes?.length ?? 0}
-              liked={post?.data.likes?.includes(userId) ?? false}
+              liked={(post?.data.likes as string[])?.includes(userId) ?? false}
             />
 
             {/* Show Edit + Delete only for author */}

@@ -69,8 +69,8 @@ export const authApi = createApi({
                 url: "user/avatar",
                 body: avatarUrl
             }),
-            invalidatesTags: (result, error, body) =>
-                result ? [{ type: "User", id: result.data._id }] : [],
+            invalidatesTags: ['User'],
+
         }),
 
         // get user
@@ -89,8 +89,8 @@ export const authApi = createApi({
                 body: { password }
 
             }),
-            invalidatesTags: (result, error, body) =>
-                result ? [{ type: "User", id: result.data._id }] : [],
+            invalidatesTags: () => [{ type: "User" }]
+
         })
     })
 })

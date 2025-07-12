@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/hooks/userAuth";
 import ReelCard from "./ReelCard";
-import { IVideo } from "@/model/reels.model";
+import { isAuthor, IVideo } from "@/model/reels.model";
 
 interface Reel {}
 export default function ReelList({ reels }: { reels: IVideo[] }) {
@@ -19,14 +19,14 @@ export default function ReelList({ reels }: { reels: IVideo[] }) {
             videoUrl={reel.media.url ?? ""}
             thumbnailUrl={reel.thumbnailUrl}
             author={{
-              avatar: reel.authorId?.avatar,
-              userName: reel.authorId.userName,
+              avatar: isAuthor(reel.authorId) ? reel.authorId.avatar : "",
+              userName: isAuthor(reel.authorId) ? reel.authorId.userName : "",
             }}
             title={reel.title}
             description={reel.description}
             likesCount={reel?.likes?.length ?? 0}
             slug={reel._id.toString()}
-            likedByMe={reel?.likes?.includes(currentUserId) ?? false}
+            likedByMe={reel?.likes?.includes(currentUserId as string) ?? false}
             // commentsCount={reel.comments.length || 0}
           />
         </div>

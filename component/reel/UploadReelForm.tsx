@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useCreateReelMutation } from "@/features/reels/reelsApi";
 import VideoUpload from "../upload/VideoUpload";
+import { isRTKError } from "@/types/rtkError.types";
 
 type UploadFormValues = {
   title: string;
@@ -46,8 +47,10 @@ export default function UploadReelForm() {
       reset();
       router.push("/reels");
     } catch (error: unknown) {
-      console.log("Error uploading reel: ", error);
-      toast.error(error?.data?.error || "Something went wrong");
+      console.log("error: ", error);
+
+      if (isRTKError(error)) toast.error(error.data.error);
+      else toast.error("Something went wrong");
     }
   };
 

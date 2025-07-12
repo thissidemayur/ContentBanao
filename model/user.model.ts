@@ -13,8 +13,7 @@ And another file tries .populate("authorId") from its own different mongoose ins
 → That instance won’t know the User model → leading to your exact error:  MissingSchemaError: Schema hasn't been registered for model "User".
 
 */
-import mongoose from "@/lib/db.lib";
-import { Schema, model, models } from "mongoose"
+import mongoose, { Schema, model, models } from "mongoose";
 import { IUser } from "@/types/User.types";
 import bcrypt from "bcryptjs";
 
@@ -55,9 +54,7 @@ const userSchema = new Schema<IUser>({
         type: String,
         sparse: true,
         unique: true,
-        default: function () {
-            return this._id?.toString()
-        }
+
     }
 
 

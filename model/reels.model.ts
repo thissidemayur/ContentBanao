@@ -1,6 +1,6 @@
 import { MediaItem } from "@/types/media.types";
-import mongosse from '@/lib/db.lib'
-import mongoose, { model, models, Schema } from "mongoose";
+import mongoose, { Schema, model, models } from "mongoose";
+
 
 export const VIDEO_DIMENSION = {
     width: 1080,
@@ -12,6 +12,12 @@ export interface Author {
     userName: string;
     avatar: string;
 }
+
+export function isAuthor(author: any): author is Author {
+    return author && typeof author === "object" && "userName" in author && "avatar" in author;
+}
+
+
 
 
 export interface IVideo {
@@ -28,6 +34,7 @@ export interface IVideo {
     likes?: string[]
 
 }
+
 
 const transformationSchema = new Schema({
     height: {
@@ -83,7 +90,7 @@ export const videoSchema = new Schema<IVideo>({
         type: String
     },
     authorId: {
-        type: mongosse.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "User",
         required: true
     },
