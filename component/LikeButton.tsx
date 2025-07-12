@@ -2,7 +2,7 @@
 
 import { useLikeBlogMutation } from "@/features/blogs/blogsApi";
 import { useAuth } from "@/hooks/userAuth";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
 
 type Props = {
@@ -16,8 +16,13 @@ export default function LikeButton({ slug, likes, liked }: Props) {
 
   const [likeBlog, { isLoading }] = useLikeBlogMutation();
 
-  const [isLiked, setIsLiked] = useState(liked);
   const [likeCount, setLikeCount] = useState(likes);
+  const [isLiked, setIsLiked] = useState(liked);
+
+  useEffect(() => {
+    setLikeCount(likes);
+    setIsLiked(liked);
+  }, [likes, liked]);
 
   const toggleLike = async () => {
     if (!isAuthenticated) {
