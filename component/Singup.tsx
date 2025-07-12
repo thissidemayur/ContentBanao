@@ -44,7 +44,7 @@ export default function SignupForm() {
       router.push("/auth/login");
     } catch (error) {
       console.log(error);
-      toast.error((error as any).data.error);
+      toast.error((error as any)?.data?.error || "something went wrong");
     }
   };
 
@@ -171,13 +171,13 @@ export default function SignupForm() {
           </div>
 
           {/* Google */}
-          <button
+          {/* <button
             type="button"
             className="w-full flex items-center justify-center gap-3 border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition"
           >
             <FaGoogle className="h-5 w-5" />
             Continue with Google
-          </button>
+          </button> */}
         </form>
 
         {/* Already have account */}
