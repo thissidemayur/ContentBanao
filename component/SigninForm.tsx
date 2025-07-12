@@ -1,7 +1,6 @@
 "use client";
 
-import { Eye, EyeOff, Loader2, LogIn, Mail, Lock } from "lucide-react";
-import { FaGoogle } from "react-icons/fa";
+import { Eye, EyeOff, LogIn, Mail, Lock } from "lucide-react";
 
 import { useState } from "react";
 import { FieldErrors, SubmitHandler, useForm } from "react-hook-form";

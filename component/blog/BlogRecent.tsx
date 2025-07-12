@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getValidImageSrc } from "@/lib/Backend-helperFn";
+import { toast } from "sonner";
 
 interface imageDetail {
   type: string;
@@ -44,9 +45,9 @@ const RecentPosts = () => {
       setPosts(data.posts);
       setTotalPages(data.totalPages);
       setError(null);
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message || "Something went wrong");
+    } catch (err) {
+      console.log("err: ", err);
+      toast.error("something went wrong");
     } finally {
       setLoading(false);
     }

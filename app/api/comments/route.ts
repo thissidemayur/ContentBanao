@@ -4,8 +4,7 @@ import { connectToDB } from "@/lib/db.lib";
 import Comment from "@/model/comment.model";
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from "next/server"
-import User from "@/model/user.model";
-import Blog from "@/model/blog.model";
+
 export async function POST(req: NextRequest) {
 
     const token = await getToken({ req })

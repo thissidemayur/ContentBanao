@@ -6,6 +6,7 @@ import ImageUpload from "@/component/upload/ImageUpload";
 import { Controller, FieldErrors, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useDispatch } from "react-redux";
+import { Blog } from "@/types/blog.types";
 
 export interface BlogFormValues {
   title: string;
@@ -17,7 +18,7 @@ export interface BlogFormValues {
 
 interface prop {
   mode: "create" | "edit";
-  initialData?: any;
+  initialData?: Blog;
   isSubmitting?: boolean;
   onSubmit: (data: BlogFormValues) => void;
 }

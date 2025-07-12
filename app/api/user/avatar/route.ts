@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
     const { avatarUrl } = await req.json()
     console.log("avatarUrl: ", avatarUrl)
     if (!avatarUrl) return NextResponse.json(
-        { message: "avatar not found,please upload avatar" },
+        { error: "avatar not found,please upload avatar" },
         { status: 400 }
     )
 
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     const session = await getServerSession(authOptions)
     console.log("Session: ", session)
     if (!session) return NextResponse.json(
-        { message: "unathorized!!" },
+        { error: "unathorized!!" },
         { status: 401 }
     )
 
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
         )
         console.log("User: ", user)
         if (!user) return NextResponse.json(
-            { message: "user not found!!" },
+            { error: "user not found!!" },
             { status: 400 }
         )
 
@@ -44,8 +44,10 @@ export async function POST(req: NextRequest) {
 
 
     } catch (error) {
-        console.log("something went wrong while uploading avatar: ", error)
-        throw error
+        return NextResponse.json(
+            { error: "Internal server error" },
+            { status: 500 }
+        )
     }
 }
 
@@ -54,7 +56,7 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
     const { avatarUrl } = await req.json()
     if (!avatarUrl) return NextResponse.json(
-        { message: "avatar not found,please upload avatar" },
+        { error: "avatar not found,please upload avatar" },
         { status: 400 }
     )
 
@@ -67,7 +69,7 @@ export async function PUT(req: NextRequest) {
     console.log("Session: ", session)
     console.log("userName: ", userName)
     if (!session || session.user.userName != userName) return NextResponse.json(
-        { message: "unathorize access!!" },
+        { error: "unathorize access!!" },
         { status: 401 }
     )
 
@@ -81,7 +83,7 @@ export async function PUT(req: NextRequest) {
             { new: true }
         )
         if (!user) return NextResponse.json(
-            { message: "user not found!!" },
+            { error: "user not found!!" },
             { status: 400 }
         )
 
@@ -92,8 +94,10 @@ export async function PUT(req: NextRequest) {
 
 
     } catch (error) {
-        console.log("something went wrong while uploading avatar: ", error)
-        throw error
+        return NextResponse.json(
+            { error: "Internal server error" },
+            { status: 500 }
+        )
     }
 }
 
@@ -110,7 +114,7 @@ export async function DELETE(req: NextRequest) {
     console.log("Session: ", session)
     console.log("userName: ", userName)
     if (!session || session.user.userName != userName) return NextResponse.json(
-        { message: "unathorize access!!" },
+        { error: "unathorize access!!" },
         { status: 401 }
     )
 
@@ -124,7 +128,7 @@ export async function DELETE(req: NextRequest) {
             { new: true }
         )
         if (!user) return NextResponse.json(
-            { message: "user not found!!" },
+            { error: "user not found!!" },
             { status: 400 }
         )
 
@@ -135,7 +139,9 @@ export async function DELETE(req: NextRequest) {
 
 
     } catch (error) {
-        console.log("something went wrong while uploading avatar: ", error)
-        throw error
+        return NextResponse.json(
+            { error: "Internal server error" },
+            { status: 500 }
+        )
     }
 }

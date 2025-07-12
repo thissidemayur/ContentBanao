@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetUserBlogsQuery } from "@/features/blogs/blogsApi"; // your RTK query
+import { responseBlog, useGetUserBlogsQuery } from "@/features/blogs/blogsApi"; // your RTK query
 import Link from "next/link";
 import Image from "next/image";
 import { ImageIcon } from "lucide-react";
@@ -49,7 +49,7 @@ const UserPosts = () => {
         {/* Posts Grid */}
         {!isLoading && !isError && blogs?.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {blogs?.map((post: any) => (
+            {blogs?.map((post: responseBlog) => (
               <Link
                 key={post._id}
                 href={`/blog/${post.slug}`}
@@ -59,7 +59,7 @@ const UserPosts = () => {
                 {post.media?.[0].url ? (
                   <Image
                     src={post.media?.[0].url}
-                    alt={post.title}
+                    alt={post.title || "alt"}
                     width={500}
                     height={300}
                     className="object-cover w-full h-48"

@@ -1,7 +1,5 @@
-import { authOptions } from "@/lib/auth.lib";
 import { connectToDB } from "@/lib/db.lib";
 import User from "@/model/user.model";
-import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -13,7 +11,7 @@ export async function GET(req: NextRequest) {
 
 
     if (!userName) return NextResponse.json(
-        { message: "User Id not found" },
+        { error: "User Id not found" },
         { status: 400 }
     )
 
@@ -23,7 +21,7 @@ export async function GET(req: NextRequest) {
         const user = await User.findById(userName).select("-password").lean()
 
         if (!user) return NextResponse.json(
-            { message: "User not found" },
+            { error: "User not found" },
             { status: 401 }
         )
 
@@ -32,8 +30,10 @@ export async function GET(req: NextRequest) {
             { status: 200 }
         )
     } catch (error) {
-        console.error("error while extracting user with its id: ", error)
-        throw error
+        return NextResponse.json(
+            { error: "Internal server error" },
+            { status: 500 }
+        )
     }
 }
 

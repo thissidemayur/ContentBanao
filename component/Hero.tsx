@@ -1,6 +1,5 @@
 "use client";
 import { ThreeDMarquee } from "@/components/ui/3d-marquee";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export function Hero() {

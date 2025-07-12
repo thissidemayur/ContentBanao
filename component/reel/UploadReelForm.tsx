@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef } from "react";
-import { Upload, X } from "lucide-react";
 import { useForm, FieldErrors } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -46,7 +45,7 @@ export default function UploadReelForm() {
       toast.success("🎉 Reel uploaded successfully!");
       reset();
       router.push("/reels");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.log("Error uploading reel: ", error);
       toast.error(error?.data?.error || "Something went wrong");
     }

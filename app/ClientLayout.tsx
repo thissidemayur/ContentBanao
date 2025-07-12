@@ -5,7 +5,6 @@ import { useSession } from "next-auth/react";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { logout, setUser } from "@/features/auth/authSlice";
-import { useAuth } from "@/hooks/userAuth";
 
 export default function ClientLayout({
   children,

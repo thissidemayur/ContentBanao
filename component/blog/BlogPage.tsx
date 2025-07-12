@@ -2,7 +2,6 @@
 import {
   useGetBlogByIDQuery,
   useDeleteBlogMutation,
-  useLikeBlogMutation,
 } from "@/features/blogs/blogsApi";
 import Image from "next/image";
 import { useRouter } from "next/navigation";

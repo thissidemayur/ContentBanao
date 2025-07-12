@@ -10,13 +10,13 @@ export async function GET(req: NextRequest) {
 
     const url = req.nextUrl
     const userName = url.pathname.split("/").pop()
-    if (!userName) return NextResponse.json({ message: "No userId" }, { status: 404 })
+    if (!userName) return NextResponse.json({ error: "No userId" }, { status: 404 })
 
 
 
     try {
         const user = await User.findOne({ userName })
-        if (!user) return NextResponse.json({ message: "User not found" }, { status: 404 })
+        if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 })
         const userId = user._id
 
         const blogs = await Blog.find({ authorId: userId }).sort({ createdAt: -1 }).lean()
@@ -35,8 +35,10 @@ export async function GET(req: NextRequest) {
             { status: 200 }
         )
     } catch (error) {
-        console.error("error whiling fetching BLOG: ", error)
-        throw error
+        return NextResponse.json(
+            { error: "Internal server error" },
+            { status: 500 }
+        )
     }
 
 }

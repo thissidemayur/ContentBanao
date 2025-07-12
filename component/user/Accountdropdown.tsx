@@ -13,7 +13,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/features/auth/authSlice";
 import Link from "next/link";
-import { RootState, AppDispatch } from "@/lib/store";
+import { AppDispatch } from "@/lib/store";
 import { signOut } from "next-auth/react";
 import { useAuth } from "@/hooks/userAuth";
 import Image from "next/image";

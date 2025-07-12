@@ -14,12 +14,12 @@ interface imageDetail {
     url: string
 
 }
-interface responseBlog {
+export interface responseBlog {
     _id: string;
     title?: string,
     isPublished?: Boolean,
     summary?: string,
-    authorId?: { userName: string; _id: string },
+    authorId?: { userName: string; _id: string, avatar: string },
     slug?: string,
     media?: imageDetail[] | [], // for image only
     tags?: string[] | [],

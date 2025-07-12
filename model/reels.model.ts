@@ -8,6 +8,12 @@ export const VIDEO_DIMENSION = {
     height: 1920,
 
 } as const
+export interface Author {
+    _id: mongoose.Types.ObjectId;
+    userName: string;
+    avatar: string;
+}
+
 
 export interface IVideo {
     _id: mongoose.Types.ObjectId;
@@ -16,17 +22,12 @@ export interface IVideo {
     media: MediaItem;
     controls?: boolean;
     thumbnailUrl: string;
-    authorId: | mongoose.Types.ObjectId
-    | {
-        _id: mongoose.Types.ObjectId;
-        userName: string;
-        avatar: string;
-    },
-    tags?: string[],
-    isPublished?: boolean,
-    likes?: {
-        type: mongoose.Types.ObjectId
-    },
+    authorId: mongoose.Types.ObjectId | Author;
+
+    tags?: string[];
+    isPublished?: boolean;
+    likes?: string[]
+
 }
 
 const transformationSchema = new Schema({

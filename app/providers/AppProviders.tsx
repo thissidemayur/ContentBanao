@@ -1,6 +1,6 @@
 "use client";
 
-import { SessionProvider, useSession } from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
 import { ReactNode } from "react";
 import { Provider } from "react-redux";
 import { makeStore, persistor } from "@/lib/store";

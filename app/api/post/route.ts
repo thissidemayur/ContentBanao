@@ -2,7 +2,6 @@ import { blogsApi } from "@/features/blogs/blogsApi";
 import { authOptions } from "@/lib/auth.lib";
 import { connectToDB } from "@/lib/db.lib";
 import Blog from "@/model/blog.model";
-import { current } from "@reduxjs/toolkit";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 

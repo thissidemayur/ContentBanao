@@ -3,8 +3,6 @@ import dynamic from "next/dynamic";
 
 import { Hero } from "@/component/Hero";
 import CTA from "@/component/CTA";
-import RecentPosts from "@/component/blog/BlogRecent";
-import AboutMayur from "@/component/About";
 import HomeBlog from "@/component/HomeBlog";
 import Footer from "@/component/Footer";
 const AnimatedTestimonials = dynamic(

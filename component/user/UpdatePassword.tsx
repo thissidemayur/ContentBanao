@@ -16,12 +16,7 @@ export default function UpdatePasswordForm() {
   const { userAuth } = useAuth();
   const userName = userAuth?.userName;
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm<PasswordFormValues>();
+  const { register, handleSubmit, reset } = useForm<PasswordFormValues>();
 
   const [updatePassword, { isLoading, isSuccess, error }] =
     useUpdatePasswordMutation();
@@ -42,11 +37,7 @@ export default function UpdatePasswordForm() {
       setTimeout(() => router.push("/"), 1000);
     } catch (error) {
       reset();
-      toast.error(
-        (error as any).data?.error ||
-          (error as any).message ||
-          "something unexpected error"
-      );
+      toast.error((error as any).data?.error || "something unexpected error");
     }
   };
 

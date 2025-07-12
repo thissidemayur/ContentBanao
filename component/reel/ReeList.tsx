@@ -2,9 +2,10 @@
 
 import { useAuth } from "@/hooks/userAuth";
 import ReelCard from "./ReelCard";
+import { IVideo } from "@/model/reels.model";
 
-export default function ReelList({ reels }: { reels: any[] }) {
-  console.log(reels.map((r) => r._id));
+interface Reel {}
+export default function ReelList({ reels }: { reels: IVideo[] }) {
   const { userAuth } = useAuth();
   const currentUserId = userAuth?.id;
   return (
@@ -15,17 +16,17 @@ export default function ReelList({ reels }: { reels: any[] }) {
           className="h-screen snap-start flex justify-center items-center"
         >
           <ReelCard
-            videoUrl={reel.media.url}
+            videoUrl={reel.media.url ?? ""}
             thumbnailUrl={reel.thumbnailUrl}
             author={{
-              avatar: reel.authorId.avatar,
+              avatar: reel.authorId?.avatar,
               userName: reel.authorId.userName,
             }}
             title={reel.title}
             description={reel.description}
-            likesCount={reel.likes.length}
-            slug={reel._id}
-            likedByMe={reel.likes.includes(currentUserId)}
+            likesCount={reel?.likes?.length ?? 0}
+            slug={reel._id.toString()}
+            likedByMe={reel?.likes?.includes(currentUserId) ?? false}
             // commentsCount={reel.comments.length || 0}
           />
         </div>

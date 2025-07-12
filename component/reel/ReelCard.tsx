@@ -2,7 +2,7 @@
 
 import { useLikeReelMutation } from "@/features/reels/reelsApi";
 import { getValidImageSrc } from "@/lib/Backend-helperFn";
-import { Heart, MessageCircle, Share2, X } from "lucide-react";
+import { Heart, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";

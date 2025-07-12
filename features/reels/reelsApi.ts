@@ -1,7 +1,5 @@
 import { IVideo } from '@/model/reels.model';
-import { MediaItem } from '@/types/media.types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import mongoose from 'mongoose';
 
 export const reelApi = createApi({
     reducerPath: "reelApi",

@@ -3,7 +3,6 @@ import { connectToDB } from "@/lib/db.lib";
 import User from "@/model/user.model";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
 
 // update password -> app/api/user/update-password
 export async function PATCH(req: NextRequest) {
