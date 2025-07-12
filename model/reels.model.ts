@@ -1,4 +1,3 @@
-import { clearModelCache } from "@/lib/Backend-helperFn";
 import { MediaItem } from "@/types/media.types";
 import mongosse from '@/lib/db.lib'
 import mongoose, { model, models, Schema } from "mongoose";

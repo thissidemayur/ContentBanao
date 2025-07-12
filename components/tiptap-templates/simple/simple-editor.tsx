@@ -67,8 +67,6 @@ import { LinkIcon } from "@/components/tiptap-icons/link-icon";
 
 // --- Hooks ---
 import { useMobile } from "@/hooks/use-mobile";
-import { useWindowSize } from "@/hooks/use-window-size";
-import { useCursorVisibility } from "@/hooks/use-cursor-visibility";
 
 // --- Components ---
 
