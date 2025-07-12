@@ -93,7 +93,6 @@ export const videoSchema = new Schema<IVideo>({
 
 })
 
-clearModelCache("Video")
 const Reel = models?.Video || model<IVideo>("Video", videoSchema)
 export default Reel;
 

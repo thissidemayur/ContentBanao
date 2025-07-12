@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/userAuth";
 import { Lock } from "lucide-react";
 import { toast } from "sonner";
+import { isRTKError } from "@/types/rtkError.types";
 
 interface PasswordFormValues {
   oldPassword: string;
@@ -37,7 +38,10 @@ export default function UpdatePasswordForm() {
       setTimeout(() => router.push("/"), 1000);
     } catch (error) {
       reset();
-      toast.error((error as any).data?.error || "something unexpected error");
+      console.log("error: ", error);
+
+      if (isRTKError(error)) toast.error(error.data.error);
+      else toast.error("Something went wrong");
     }
   };
 

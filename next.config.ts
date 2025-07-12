@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   transpilePackages: ['framer-motion'],
   images: {
-    domains: ['ik.imagekit.io', 'picsum.photos']
+    domains: ['ik.imagekit.io', 'picsum.photos', 'images.unsplash.com']
   }
 
 };

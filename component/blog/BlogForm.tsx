@@ -5,8 +5,7 @@ import React, { useEffect } from "react";
 import ImageUpload from "@/component/upload/ImageUpload";
 import { Controller, FieldErrors, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useDispatch } from "react-redux";
-import { Blog } from "@/types/blog.types";
+import { responseBlog } from "@/features/blogs/blogsApi";
 
 export interface BlogFormValues {
   title: string;
@@ -18,7 +17,7 @@ export interface BlogFormValues {
 
 interface prop {
   mode: "create" | "edit";
-  initialData?: Blog;
+  initialData?: responseBlog;
   isSubmitting?: boolean;
   onSubmit: (data: BlogFormValues) => void;
 }
@@ -29,8 +28,6 @@ export default function BlogForm({
   isSubmitting,
   onSubmit,
 }: prop) {
-  const dispatch = useDispatch();
-
   const { register, handleSubmit, setValue, watch, getValues, control, reset } =
     useForm<BlogFormValues>({
       defaultValues: {

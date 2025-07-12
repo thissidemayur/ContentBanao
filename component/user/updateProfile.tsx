@@ -15,6 +15,7 @@ import ImageUpload from "../upload/ImageUpload";
 import { setUser } from "@/features/auth/authSlice";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
+import { isRTKError } from "@/types/rtkError.types";
 
 interface formData {
   firstName: string;
@@ -102,10 +103,11 @@ export default function UpdateProfile() {
       setTimeout(() => {
         router.push(`/profile/${formData.userName}`);
       }, 1000);
-    } catch (err) {
-      toast.error(
-        (err as any).data.error || "unexpected error, try after sometimes!"
-      );
+    } catch (error) {
+      console.log("error: ", error);
+
+      if (isRTKError(error)) toast.error(error.data.error);
+      else toast.error("Something went wrong");
     }
   };
 

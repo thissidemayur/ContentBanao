@@ -7,6 +7,7 @@ import { FieldErrors, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { isRTKError } from "@/types/rtkError.types";
 
 interface formInput {
   email: string;
@@ -40,7 +41,10 @@ export default function SigninForm() {
         }, 1000);
       }
     } catch (error) {
-      toast.error((error as any).data.error);
+      console.log("error: ", error);
+
+      if (isRTKError(error)) toast.error(error.data.error);
+      else toast.error("Something went wrong");
     }
   };
 

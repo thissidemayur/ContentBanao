@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { logout } from "@/features/auth/authSlice";
 import { toast } from "sonner";
+import { isRTKError } from "@/types/rtkError.types";
 
 type FormValues = {
   password: string;
@@ -35,7 +36,10 @@ export default function DeleteAccount() {
         router.push("/");
       }, 1000);
     } catch (err) {
-      toast.error((err as any).data.error);
+      console.log("error: ", error);
+
+      if (isRTKError(error)) toast.error(error.data.error);
+      else toast.error("Something went wrong");
     }
   };
 

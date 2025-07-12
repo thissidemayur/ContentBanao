@@ -19,6 +19,6 @@ export default function ClientLayout({
     } else if (status === "unauthenticated") {
       dispatch(logout());
     }
-  }, [session, dispatch]);
+  }, [session, dispatch, status]);
   return <>{children}</>;
 }

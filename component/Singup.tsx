@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useRegisterMutation } from "@/features/auth/authApi";
 import SigninFormSkelton from "./skelton/SigninFormSkelton";
+import { isRTKError } from "@/types/rtkError.types";
 
 interface signupForm {
   email: string;
@@ -42,8 +43,10 @@ export default function SignupForm() {
       reset();
       router.push("/auth/login");
     } catch (error) {
-      console.log(error);
-      toast.error((error as any)?.data?.error || "something went wrong");
+      console.log("error: ", error);
+
+      if (isRTKError(error)) toast.error(error.data.error);
+      else toast.error("Something went wrong");
     }
   };
 

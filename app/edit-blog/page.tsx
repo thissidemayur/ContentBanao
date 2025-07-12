@@ -5,6 +5,7 @@ import {
   useGetBlogByIDQuery,
   useUpdateBlogMutation,
 } from "@/features/blogs/blogsApi";
+import { isRTKError } from "@/types/rtkError.types";
 import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
@@ -31,9 +32,11 @@ export default function EditBlogPage() {
       setTimeout(() => {
         router.push("/blog");
       }, 1000);
-    } catch (error) {
+    } catch (error: unknown) {
       console.log("error: ", error);
-      toast.error((error as any).data.error);
+
+      if (isRTKError(error)) toast.error(error.data.error);
+      else toast.error("Something went wrong");
     }
   };
 
