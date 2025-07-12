@@ -16,8 +16,11 @@ export interface IVideo {
     media: MediaItem;
     controls?: boolean;
     thumbnailUrl: string;
-    authorId: {
-        type: mongoose.Types.ObjectId
+    authorId: | mongoose.Types.ObjectId
+    | {
+        _id: mongoose.Types.ObjectId;
+        userName: string;
+        avatar: string;
     },
     tags?: string[],
     isPublished?: boolean,
@@ -69,13 +72,12 @@ export const videoSchema = new Schema<IVideo>({
     },
     description: {
         type: String,
-        required: true,
         trim: true
     },
     media: mediaSchema,
     controls: {
         type: Boolean,
-        default: true
+        default: false
     },
     thumbnailUrl: {
         type: String

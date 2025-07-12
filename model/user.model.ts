@@ -33,7 +33,8 @@ const userSchema = new Schema<IUser>({
         trim: true,
     },
     avatar: {
-        type: String
+        type: String,
+        default: "https://ik.imagekit.io/thissidemayur/a1_-IVPC5Ug1.avif"
     },
     bio: {
         type: String,
