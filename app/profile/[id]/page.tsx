@@ -5,7 +5,7 @@ import React from "react";
 import ViewProfile from "@/component/user/UserProfile";
 import UserBlog from "@/component/blog/UserBlog";
 
-export default function page() {
+export default function Page() {
   const params = useParams<{ id: string }>();
   return (
     <>
