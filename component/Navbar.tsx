@@ -63,9 +63,9 @@ export default function MainNavbar() {
             <Link
               key={label}
               href={path}
-              className="flex items-center gap-2 text-gray-800 font-medium hover:text-blue-600 transition"
+              className="flex items-center  gap-2 text-gray-800 font-medium hover:text-blue-600 transition"
             >
-              <Icon size={18} />
+              <Icon size={18} className="md:hidden" />
               {label}
             </Link>
           ))}
