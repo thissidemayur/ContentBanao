@@ -3,8 +3,9 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getValidImageSrc } from "@/lib/Backend-helperFn";
+import { getValidImageSrc, handleNativeShare } from "@/lib/Backend-helperFn";
 import { useGetBlogByIDQuery } from "@/features/blogs/blogsApi";
+import { Share2 } from "lucide-react";
 
 interface imageDetail {
   type: string;
@@ -29,19 +30,20 @@ const HomeBlog = () => {
   const { data: blog1, isLoading: isLoading1 } = useGetBlogByIDQuery(
     "silent-chains-a-simple-look-at-womens-struggle-and-strength-sf9b"
   );
+  const { data: blog3, isLoading: isLoading3 } = useGetBlogByIDQuery(
+    "what-is-tor-browser-a-beginners-guide-to-online-anonymity-an-tgud"
+  );
   const { data: blog2, isLoading: isLoading2 } = useGetBlogByIDQuery(
     "Men's-Mental-Health%3A-Battling-Loneliness-and-Silence-elhw"
   );
-  const { data: blog3, isLoading: isLoading3 } = useGetBlogByIDQuery(
-    "Brotherhood%3A-The-Forgotten-Pillar-of-Masculinity-v75e"
-  );
+
   const { data: blog4, isLoading: isLoading4 } = useGetBlogByIDQuery(
-    "Rise-Above%3A-Rejecting-LowValue-Attention-from-Women-2e56"
+    "blind-followers-fake-saints-and-the-lost-essence-of-humanity-v5hm"
   );
 
   useEffect(() => {
     if (blog1?.data && blog2?.data && blog3?.data && blog4?.data) {
-      setPosts([blog1?.data, blog2?.data, blog3?.data, blog4?.data]);
+      setPosts([blog1?.data, blog3?.data, blog4?.data, blog2?.data]);
       setLoading(false);
     }
   }, [blog1, blog2, blog3, blog4]);
@@ -111,13 +113,30 @@ const HomeBlog = () => {
                     ))}
                   </div>
 
-                  <div className="mt-4">
+                  <div className="mt-4 flex justify-between">
                     <Link
-                      href={`/blog/${encodeURIComponent(post.slug ?? "")}`}
-                      className="text-rose-500 font-semibold hover:text-rose-600 transition"
+                      href={`/blog/${encodeURIComponent(
+                        post.slug ?? "default-slug"
+                      )}`}
+                      className="text-rose-500 font-semibold hover:text-rose-600 transition hover:scale-105"
                     >
                       Read more →
                     </Link>
+
+                    <button
+                      className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition hover:scale-105"
+                      onClick={() =>
+                        handleNativeShare(
+                          post.title ?? "Untitled Blog",
+                          `${window.location.origin}/blog/${encodeURIComponent(
+                            post.slug ?? "default-slug"
+                          )}`
+                        )
+                      }
+                    >
+                      <Share2 size={18} />
+                      Share{" "}
+                    </button>
                   </div>
                 </div>
               </article>

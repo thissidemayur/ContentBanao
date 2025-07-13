@@ -33,16 +33,20 @@ export default function MainNavbar() {
     <nav className="bg-white border-b border-gray-200">
       <div className="max-w-screen-xl mx-auto flex justify-between items-center p-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap12">
+          {/* Logo */}
           <Image
-            src="https://flowbite.com/docs/images/logo.svg"
-            alt="Logo"
-            width={32}
-            height={32}
-            className="h-8 w-8"
+            src="/icon.png"
+            alt="ContentBanao Logo"
+            width={150}
+            height={150}
+            className="h-10 w-10 md:h-12 md:w-12 object-contain"
+            priority
           />
-          <span className="text-2xl font-semibold text-gray-900">
-            ContentDekho
+
+          {/* Text */}
+          <span className="text-xl md:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+            Content<span className="text-blue-600">Banao</span>
           </span>
         </Link>
 
@@ -57,17 +61,20 @@ export default function MainNavbar() {
               {label}
             </Link>
           ))}
-
-          {session && <AccountDropdown />}
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100"
-        >
-          <Menu size={24} />
-        </button>
+        {/* Right Section: Account Dropdown and Hamburger */}
+        <div className="flex items-center gap-0.5">
+          {session && <AccountDropdown />}
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100"
+          >
+            <Menu size={24} />
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
@@ -83,8 +90,6 @@ export default function MainNavbar() {
               {label}
             </Link>
           ))}
-
-          {session && <AccountDropdown />}
         </div>
       )}
     </nav>

@@ -98,38 +98,53 @@ const testimonials: Array<{
 }> = [
   {
     quote:
-      "This blog is my go-to for creative inspiration. The reels are short, impactful, and always on point.",
-    name: "Ananya Sharma",
-    designation: "Content Strategist",
-    src: "/images/testimonials/ananya.jpg",
+      "As a student, this blog keeps me inspired beyond textbooks. The reels are a perfect dose of creativity between study breaks.",
+    name: "Ansika Pal",
+    designation: "Student @ Sunbeam, Varanasi",
+    src: "https://ik.imagekit.io/thissidemayur/ansika_RhjFNkNUmj.jpeg",
   },
   {
     quote:
-      "The mix of insightful writing and visually compelling reels makes this site stand out in the digital space.",
-    name: "Ravi Desai",
-    designation: "Digital Marketer",
-    src: "/images/testimonials/ravi.jpg",
+      "As a developer, I appreciate platforms that blend technical insight with storytelling — and this one nails it.",
+    name: "Mayur Pal",
+    designation: "Developer",
+    src: "https://ik.imagekit.io/thissidemayur/mayur_xB9XwXkqAU.jpeg",
   },
   {
     quote:
-      "I started reading the blog for tips, but stayed for the storytelling. The reels are like a burst of motivation!",
-    name: "Sara Fernandes",
-    designation: "Lifestyle Influencer",
-    src: "/images/testimonials/sara.jpg",
+      "For students like me, this site makes learning feel personal. The stories stick with you, and the reels are addictive.",
+    name: "Samiksha Pal",
+    designation: "Student @ Sunbeam, Varanasi",
+    src: "https://ik.imagekit.io/thissidemayur/samikha_pRqvhWrli.jpeg",
   },
   {
     quote:
-      "A unique blend of education and entertainment — the reels keep getting better, and the blog posts are gold.",
-    name: "Arjun Mehta",
-    designation: "Video Editor",
-    src: "/images/testimonials/arjun.jpg",
+      "As a content creator, I love seeing platforms prioritize both quality visuals and meaningful storytelling. This one does both effortlessly.",
+    name: "Aman Pal",
+    designation: "Content Creator",
+    src: "https://ik.imagekit.io/thissidemayur/modak_3kxE1N9l-e.jpeg",
   },
   {
     quote:
-      "Whenever I need a quick break or deep dive into a topic, this site delivers. It’s both smart and refreshing.",
-    name: "Meera Joshi",
-    designation: "UX Designer",
-    src: "/images/testimonials/meera.jpg",
+      "Between classes and study sessions, this site gives me a refreshing escape with content that actually adds value.",
+    name: "Chahat Pal",
+    designation: "Student @ APS, Banaras",
+    src: "https://ik.imagekit.io/thissidemayur/chachat_VsswUz1sx.jpeg",
+  },
+
+  {
+    quote:
+      "I follow a lot of student-friendly platforms, but this one feels the most authentic — every post feels made for us.",
+    name: "Khushi Pal",
+    designation: "Student @ APS, Banaras",
+    src: "https://ik.imagekit.io/thissidemayur/Screenshot_from_2025-07-13_19-36-53_LSb6RGcGCH.png",
+  },
+  {
+    quote:
+      "For content creators like me, it’s inspiring to see platforms where visuals, story, and authenticity come together so well.",
+    name: "Vinay Pal",
+    designation: "Content Creator",
+    src: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=3540&q=80",
   },
 ];
 
@@ -150,6 +165,12 @@ export default function Home() {
 
       {/* Testimonial */}
       <AnimatedTestimonials testimonials={testimonials} />
+      {/* Separator */}
+      <div className="w-fit mx-auto mt-16 flex space-x-2">
+        <div className="h-0.5 w-2 bg-gray-600"></div>
+        <div className="h-0.5 w-32 bg-gray-600"></div>
+        <div className="h-0.5 w-2 bg-gray-600"></div>
+      </div>
 
       <Footer />
     </>

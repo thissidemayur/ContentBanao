@@ -5,40 +5,60 @@ import { useRouter } from "next/navigation";
 export function Hero() {
   const router = useRouter();
   const images = [
-    "/images/blog1.jpeg",
-    "/images/blog2.jpeg",
-    "/images/blog3.jpeg",
-    "/images/blog28.jpeg",
-    "/images/blog12.jpeg",
-    "/images/blog13.jpeg",
-    "/images/blog14.jpeg",
-    "/images/blog29.jpeg",
-    "/images/blog30.jpeg",
-    "/images/blog31.jpeg",
-    "/images/blog32.jpeg",
-    "/images/blog4.jpeg",
-    "/images/blog5.jpeg",
-    "/images/blog20.jpeg",
-    "/images/blog21.jpeg",
-    "/images/blog22.jpeg",
-    "/images/blog23.jpeg",
-    "/images/blog6.jpeg",
-    "/images/blog7.jpeg",
-    "/images/blog8.jpeg",
-    "/images/blog9.jpeg",
-    "/images/blog10.jpeg",
+    "https://ik.imagekit.io/thissidemayur/__jXCY3pmEB.jpeg",
+    "https://ik.imagekit.io/thissidemayur/___1__Dw86Y6ksH.jpeg",
+    // bhairav
+    "https://ik.imagekit.io/thissidemayur/___7__IH0uf6tQx.jpeg",
+
+    "https://ik.imagekit.io/thissidemayur/___6__YgKAoXsJBh.jpeg",
+    // cosmic
+
+    // buddha
+    "https://ik.imagekit.io/thissidemayur/___14__DScqXI_0p.jpeg",
+    "https://ik.imagekit.io/thissidemayur/___4__wlIKB8J7N.jpeg",
+    "https://ik.imagekit.io/thissidemayur/___3___BLUMeQ6C.jpeg",
+
+    "https://ik.imagekit.io/thissidemayur/___15__Js3DD3__Rn.jpeg",
+
+    // articels
+    "https://ik.imagekit.io/thissidemayur/RMS_Titanic_news__These_first_stories_of_the_sinking_disaster_dated_April_15__1912_were_wildly_inaccurate_-_Click_Americana_HznF42i7MN.jpeg",
+
+    "https://ik.imagekit.io/thissidemayur/___2__-v5rbun_k.jpeg",
+    "https://ik.imagekit.io/thissidemayur/___3__3ECB4gNEB.jpeg",
+    "https://ik.imagekit.io/thissidemayur/___8__un0cQffsa.jpeg",
+
+    "https://ik.imagekit.io/thissidemayur/___16__opwBAl4uOy.jpeg",
+    "https://ik.imagekit.io/thissidemayur/7c5fc018-1887-46df-be28-f124e1aa09b3_jaFQ6o2Lsy.jpeg",
+    "https://ik.imagekit.io/thissidemayur/Vintage_posters___Iphone_wallpaper_fashion__Fashion_poster__Vintage_posters_CBsUgcUcE.jpeg",
+    "https://ik.imagekit.io/thissidemayur/Physics_Life_Pt-gbJATTE.jpeg",
+    "https://ik.imagekit.io/thissidemayur/_V_yVDQykZbUu.jpeg",
     "/images/blog11.jpeg",
 
-    "/images/blog15.jpeg",
-    "/images/blog16.jpeg",
-    "/images/blog17.jpeg",
-    "/images/blog18.jpeg",
-    "/images/blog19.jpeg",
+    // scinece
 
-    "/images/blog24.jpeg",
-    "/images/blog25.jpeg",
-    "/images/blog26.jpeg",
-    "/images/blog27.jpeg",
+    // mola
+    // free
+    "https://ik.imagekit.io/thissidemayur/3bb5ce69-6c2c-4e0c-a5ac-971d36daa97d_EzBY6yg5mw.jpeg",
+    "https://ik.imagekit.io/thissidemayur/52654faa-07fd-4164-a96e-9934048b3f19_9Rykg6fM7l.jpeg",
+    "https://ik.imagekit.io/thissidemayur/aa7d6a83-9187-4022-9d16-3dcb4cc64e84_zGLfFzWEVx.jpeg",
+
+    "https://ik.imagekit.io/thissidemayur/__Sv32VJ8Eu.jpeg",
+    "https://ik.imagekit.io/thissidemayur/___5__v2I-ABiSp.jpeg",
+    "https://ik.imagekit.io/thissidemayur/___6__dTQ-jTgLb.jpeg",
+
+    "https://ik.imagekit.io/thissidemayur/___9__nJlNQdn2Yi.jpeg",
+    "https://ik.imagekit.io/thissidemayur/___10__xdJAVmtrX.jpeg",
+    "https://ik.imagekit.io/thissidemayur/___11__6Xlwzi6MHc.jpeg",
+
+    "https://ik.imagekit.io/thissidemayur/___1__En7MXpaxU.jpeg",
+    "https://ik.imagekit.io/thissidemayur/___4__AuElF1Sy-.jpeg",
+
+    "https://ik.imagekit.io/thissidemayur/ab4a8f84-5563-4c6c-a03a-6b1ee0dd96e8_5V25FSd_s.jpeg",
+    "https://ik.imagekit.io/thissidemayur/mayur2_YUowPWpIp_uzwWcy5OQd.jpeg",
+    "https://ik.imagekit.io/thissidemayur/Under_the_night_sky__underthesky_g5phAXsMR9.jpeg",
+
+    "https://ik.imagekit.io/thissidemayur/___12__lwqnu3EutO.jpeg",
+    "https://ik.imagekit.io/thissidemayur/___13__t12zxuxKaP.jpeg",
   ];
 
   return (
