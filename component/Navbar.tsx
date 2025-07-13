@@ -4,7 +4,15 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { Menu, Search } from "lucide-react";
+import {
+  Menu,
+  Home,
+  FileText,
+  Video,
+  LogIn,
+  UserPlus,
+  Plus,
+} from "lucide-react";
 import AccountDropdown from "@/component/user/Accountdropdown";
 import SearchBar from "./SearchBar";
 
@@ -13,26 +21,26 @@ export default function MainNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const authLinks = [
-    { label: "Home", path: "/" },
-    { label: "Blogs", path: "/blog" },
-    { label: "Reels", path: "/reels" },
-    { label: "Add Blog", path: "/create-blog" },
-    { label: "Add Reel", path: "/add-reel" },
+    { label: "Home", path: "/", icon: Home },
+    { label: "Blogs", path: "/blog", icon: FileText },
+    { label: "Reels", path: "/reels", icon: Video },
+    { label: "Add Blog", path: "/create-blog", icon: Plus },
+    { label: "Add Reel", path: "/add-reel", icon: Plus },
   ];
 
   const guestLinks = [
-    { label: "Home", path: "/" },
-    { label: "Blogs", path: "/blog" },
-    { label: "Reels", path: "/reels" },
-    { label: "Login", path: "/auth/login" },
-    { label: "Register", path: "/auth/register" },
+    { label: "Home", path: "/", icon: Home },
+    { label: "Blogs", path: "/blog", icon: FileText },
+    { label: "Reels", path: "/reels", icon: Video },
+    { label: "Login", path: "/auth/login", icon: LogIn },
+    { label: "Register", path: "/auth/register", icon: UserPlus },
   ];
 
   const links = session ? authLinks : guestLinks;
 
   return (
     <nav className="bg-white border-b border-gray-200">
-      {/* Top Nav: Logo + Links + Account */}
+      {/* Top Nav */}
       <div className="max-w-screen-xl mx-auto flex justify-between items-center p-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
@@ -51,18 +59,19 @@ export default function MainNavbar() {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center space-x-6">
-          {links.map(({ label, path }) => (
+          {links.map(({ label, path, icon: Icon }) => (
             <Link
               key={label}
               href={path}
-              className="text-gray-800 font-medium hover:text-blue-600 transition"
+              className="flex items-center gap-2 text-gray-800 font-medium hover:text-blue-600 transition"
             >
+              <Icon size={18} />
               {label}
             </Link>
           ))}
         </div>
 
-        {/* Right: Account + Hamburger */}
+        {/* Right Section */}
         <div className="flex items-center gap-2">
           {session && <AccountDropdown />}
           <button
@@ -74,7 +83,7 @@ export default function MainNavbar() {
         </div>
       </div>
 
-      {/* Search Bar */}
+      {/* Search */}
       <div className="max-w-screen-xl mx-auto px-4 pb-4">
         <div className="relative">
           <SearchBar />
@@ -84,13 +93,14 @@ export default function MainNavbar() {
       {/* Mobile Menu */}
       {mobileOpen && (
         <div className="md:hidden border-t border-gray-200 px-4 pb-4 pt-2 space-y-2 bg-white">
-          {links.map(({ label, path }) => (
+          {links.map(({ label, path, icon: Icon }) => (
             <Link
               key={label}
               href={path}
               onClick={() => setMobileOpen(false)}
-              className="block text-gray-800 font-medium hover:text-blue-600 transition"
+              className="flex items-center gap-3 text-gray-800 font-medium py-2 px-2 rounded hover:bg-gray-100 transition"
             >
+              <Icon size={25} className="text-black" />
               {label}
             </Link>
           ))}
