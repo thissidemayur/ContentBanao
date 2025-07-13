@@ -46,8 +46,7 @@ const people = [
     id: 9,
     name: "Vinay ",
     designation: "Content Creator",
-    image:
-      "https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3534&q=80",
+    image: "https://ik.imagekit.io/thissidemayur/vinay_m3DC8qlsz.avif",
   },
   {
     id: 8,
@@ -78,7 +77,7 @@ const CTA = () => {
 
           {/* Heading and buttons */}
           <div className="mt-6 m-auto space-y-6 md:w-8/12 lg:w-7/12">
-            <h1 className="text-center text-4xl font-bold text-gray-800 dark:text-white md:text-5xl">
+            <h1 className="text-center text-2xl font-bold text-gray-800 dark:text-white md:text-5xl">
               Join a Creative, Insightful Community
             </h1>
             <p className="text-center text-xl text-gray-600 dark:text-gray-300">

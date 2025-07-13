@@ -8,7 +8,6 @@ import { isRTKError } from "@/types/rtkError.types";
 import { handleNativeShare } from "@/lib/Backend-helperFn";
 
 export default function UserProfile({ id }: { id: string }) {
-  console.log("Id: ", id);
   const { data, isLoading, error } = useGetUserByIdQuery(id);
   const user = data?.data;
 

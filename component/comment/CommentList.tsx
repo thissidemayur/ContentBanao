@@ -18,7 +18,6 @@ type Comment = {
 
 export default function CommentList({ blogId }: { blogId: string }) {
   const { data, error, isLoading } = useGetCommentQuery(blogId);
-  console.log("commentData: ", data);
   const { userAuth } = useAuth();
   const currentUserId = userAuth?.id;
   const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentMutation();

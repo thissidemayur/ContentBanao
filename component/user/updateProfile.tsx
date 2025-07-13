@@ -41,7 +41,6 @@ export default function UpdateProfile() {
     skip: !shouldFetch,
     refetchOnMountOrArgChange: true,
   });
-  console.log("user: ", data);
 
   const {
     register,
@@ -83,7 +82,6 @@ export default function UpdateProfile() {
       const latestUser = await refetchUser().unwrap();
       const latestUserData = latestUser?.data;
       if (!latestUserData?._id) throw new Error("Missing user id");
-      console.log("latestUser: ", latestUserData);
       // Update NextAuth session JWT values too
       await update({
         userName: latestUserData.userName,

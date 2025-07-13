@@ -22,7 +22,6 @@ const CommentCard: React.FC<CommentCardProps> = ({
   onDelete,
   canDelete,
 }) => {
-  console.log("CanDelete: ", canDelete);
   return (
     <div className="w-full max-w-2xl mx-auto rounded-xl border border-gray-100 shadow-sm p-5 bg-white flex items-start gap-4">
       <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden flex-shrink-0 relative">

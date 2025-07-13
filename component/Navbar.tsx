@@ -36,7 +36,7 @@ export default function MainNavbar() {
         <Link href="/" className="flex items-center gap12">
           {/* Logo */}
           <Image
-            src="/icon.png"
+            src="https://ik.imagekit.io/thissidemayur/contentBanao-logo-transparent_1RRhSMDb9P.png"
             alt="ContentBanao Logo"
             width={150}
             height={150}

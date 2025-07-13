@@ -86,7 +86,6 @@ export default function BlogPage({ slug }: Props) {
   };
 
   const userId = userAuth?.id;
-  if (!userId) return;
   const blogId = post?.data._id;
 
   // const hasLiked = post?.data.likes?.includes(userId);
@@ -133,7 +132,9 @@ export default function BlogPage({ slug }: Props) {
                 slug={blog.slug ?? ""}
                 likes={post?.data.likes?.length ?? 0}
                 liked={
-                  (post?.data.likes as string[])?.includes(userId) ?? false
+                  userId
+                    ? (post?.data.likes as string[])?.includes(userId)
+                    : false
                 }
               />
 

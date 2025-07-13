@@ -37,7 +37,6 @@ export default function SignupForm() {
         email: data.email,
         password: data.password,
       }).unwrap();
-      console.log("Response: ", res);
 
       toast.success("Registered successfully!");
       reset();

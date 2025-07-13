@@ -16,8 +16,8 @@ export default function EmblaCarousel({ items, title }: EmblaCarouselProps) {
   return (
     <div className="max-w-6xl mx-auto px-4">
       <div className="flex justify-between items-center mb-4">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900 md:text-4xl">
+        <div className="md:mb-12 mb-5 text-center">
+          <h2 className="text-2xl font-extrabold text-gray-900 md:text-4xl">
             {title}
           </h2>
         </div>

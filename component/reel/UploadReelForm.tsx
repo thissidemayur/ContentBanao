@@ -42,7 +42,6 @@ export default function UploadReelForm() {
         videoUrl: data.url,
       }).unwrap();
 
-      console.log("submitData: ", res);
       toast.success("🎉 Reel uploaded successfully!");
       reset();
       router.push("/reels");

@@ -28,7 +28,6 @@ export default function DeleteAccount() {
   const onSubmit = async (data: FormValues) => {
     try {
       const res = await deleteAccount({ password: data.password }).unwrap();
-      console.log("res: ", res);
       reset();
       toast.success(res.message);
       dispatch(logout());

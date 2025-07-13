@@ -53,7 +53,6 @@ const RecentPosts = () => {
       setLoading(false);
     }
   };
-  console.log("posts: ", posts);
 
   useEffect(() => {
     fetchPosts();

@@ -50,7 +50,7 @@ const FileUploadBase: React.FC<FileUploadProps> = ({
         });
 
         isUploadDone = true;
-        console.log("✅ Upload successful", uploadResponse);
+        // console.log("✅ Upload successful", uploadResponse);
         onSuccess(uploadResponse);
       } catch (error) {
         if (error instanceof ImageKitAbortError) {

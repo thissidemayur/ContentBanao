@@ -7,7 +7,6 @@ import UserBlog from "@/component/blog/UserBlog";
 
 export default function page() {
   const params = useParams<{ id: string }>();
-  console.log("params: ", params.id);
   return (
     <>
       <ViewProfile id={params.id} />

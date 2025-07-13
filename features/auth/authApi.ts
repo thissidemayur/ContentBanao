@@ -8,8 +8,8 @@ export const authApi = createApi({
     tagTypes: ['User'],
 
     endpoints: (builder) => ({
+        // register
         register: builder.mutation<void, { email: string; password: string }>({
-            // query:(id)=>{}
             query: ({ email, password }) => ({
                 url: "auth/register",
                 method: "POST",
@@ -74,7 +74,7 @@ export const authApi = createApi({
         }),
 
         // get user
-        getUser: builder.query<{ data: IUser, message: string }, string>({
+        getUserById: builder.query<{ data: IUser, message: string }, string>({
             query: (id) => `user/${id}`,
             providesTags: (result, error, id) =>
                 result ? [{ type: "User", id }] : [],
@@ -101,6 +101,6 @@ export const {
     useUpdateProfileMutation,
     useUploadAvtarMutation,
     useUpdateAvtarMutation,
-    useGetUserQuery,
+    useGetUserByIdQuery,
     useDeleteUserMutation
 } = authApi;
