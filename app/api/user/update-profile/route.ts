@@ -30,7 +30,7 @@ export async function PATCH(req: NextRequest) {
 
         // Check if userName exists for another user
         if (userName && user.userName !== userName) {
-            const existingUserName = await User.findOne({ userName: userName.trim() })
+            const existingUserName = await User.findOne({ userName: userName.trim() }).select("-password")
             if (existingUserName) {
                 return NextResponse.json(
                     { error: "Username already taken, choose a different one." },
@@ -42,7 +42,7 @@ export async function PATCH(req: NextRequest) {
 
         if (firstName && user.firstName !== firstName) user.firstName = firstName.trim()
         if (lastName && user.lastName !== lastName) user.lastName = lastName.trim()
-        if (avatar) user.avatar = avatar.trim()
+        if (avatar) user.avatar = avatar.url
         if (bio && bio !== user.bio) user.bio = bio
         if (email && user.email !== email) user.email = email.trim()
 
@@ -52,6 +52,7 @@ export async function PATCH(req: NextRequest) {
             { message: "User data updated successfully", data: user },
             { status: 200 }
         )
+
     } catch {
         return NextResponse.json(
             { error: "Internal Server Error" },
