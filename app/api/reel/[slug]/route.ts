@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
     const url = req.nextUrl
     const slug = url.pathname.split("/").pop()
+    console.log("Slug: ", slug)
 
     if (!slug) return NextResponse.json(
         { error: "slug not found" },
@@ -24,10 +25,10 @@ export async function GET(req: NextRequest) {
             { status: 400 }
         )
     }
-
+    console.log("reel: ", reel)
     return NextResponse.json(
         { message: "reel found successfully", data: reel },
-        { status: 400 }
+        { status: 200 }
     )
 }
 

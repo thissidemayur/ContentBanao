@@ -1,4 +1,4 @@
-import { IVideo } from '@/model/reels.model';
+import { IVideo } from '@/types/Video.types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const reelApi = createApi({
@@ -7,7 +7,7 @@ export const reelApi = createApi({
     tagTypes: ["reel"],
     endpoints: (build) => ({
         // get Reel by Id
-        getReelById: build.query<IVideo, string>({
+        getReelById: build.query<{ message: string, data: IVideo }, string>({
             query: (id) => `/reel/${id}`,
 
         }),

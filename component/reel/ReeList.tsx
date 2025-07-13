@@ -2,7 +2,8 @@
 
 import { useAuth } from "@/hooks/userAuth";
 import ReelCard from "./ReelCard";
-import { isAuthor, IVideo } from "@/model/reels.model";
+import { isAuthor } from "@/model/reels.model";
+import { IVideo } from "@/types/Video.types";
 
 interface Reel {}
 export default function ReelList({ reels }: { reels: IVideo[] }) {

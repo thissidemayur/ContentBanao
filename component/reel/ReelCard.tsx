@@ -1,15 +1,15 @@
 "use client";
 
 import { useLikeReelMutation } from "@/features/reels/reelsApi";
-import { getValidImageSrc } from "@/lib/Backend-helperFn";
-import { Heart, X } from "lucide-react";
+import { getValidImageSrc, handleNativeShare } from "@/lib/Backend-helperFn";
+import { Heart, Share2, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 
 type Props = {
   videoUrl: string;
-  thumbnailUrl: string;
+  thumbnailUrl?: string;
   author: {
     avatar: string;
     userName: string;
@@ -19,7 +19,7 @@ type Props = {
   likesCount?: number;
   commentsCount?: number;
   slug: string;
-  likedByMe: boolean;
+  likedByMe?: boolean;
 };
 
 export default function VideoCard({
@@ -77,6 +77,20 @@ export default function VideoCard({
               }`}
             />
             <span className="text-xs">{likeCount}</span>
+          </button>
+
+          <button
+            onClick={() =>
+              handleNativeShare(
+                title ?? "Untitled Reel",
+                `${window.location.origin}/reels/${encodeURIComponent(
+                  slug ?? "default-slug"
+                )}`
+              )
+            }
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-300 text-zinc-100 hover:bg-blue-400 hover:scale-110 transition duration-300 shadow-sm"
+          >
+            <Share2 size={20} />
           </button>
         </div>
 

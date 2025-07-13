@@ -5,7 +5,7 @@ import { useGetReelQuery } from "@/features/reels/reelsApi";
 import ReelLoader from "@/component/skelton/ReelLoader";
 import NoReelFound from "@/component/reel/NoReelFound";
 import ReelList from "@/component/reel/ReeList";
-import { IVideo } from "@/model/reels.model";
+import { IVideo } from "@/types/Video.types";
 
 export default function ReelFeed() {
   const [page, setPage] = useState(1);
