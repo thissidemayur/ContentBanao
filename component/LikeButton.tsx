@@ -4,6 +4,7 @@ import { useLikeBlogMutation } from "@/features/blogs/blogsApi";
 import { useAuth } from "@/hooks/userAuth";
 import React, { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
+import { toast } from "sonner";
 
 type Props = {
   slug: string;
@@ -26,7 +27,8 @@ export default function LikeButton({ slug, likes, liked }: Props) {
 
   const toggleLike = async () => {
     if (!isAuthenticated) {
-      alert("Please login first!");
+      toast.error("You need to be logged in to like this post.");
+
       return;
     }
 
