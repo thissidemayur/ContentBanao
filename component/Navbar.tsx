@@ -4,8 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { Menu } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import AccountDropdown from "@/component/user/Accountdropdown";
+import SearchBar from "./SearchBar";
 
 export default function MainNavbar() {
   const { data: session } = useSession();
@@ -31,26 +32,24 @@ export default function MainNavbar() {
 
   return (
     <nav className="bg-white border-b border-gray-200">
+      {/* Top Nav: Logo + Links + Account */}
       <div className="max-w-screen-xl mx-auto flex justify-between items-center p-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap12">
-          {/* Logo */}
+        <Link href="/" className="flex items-center gap-2">
           <Image
             src="https://ik.imagekit.io/thissidemayur/contentBanao-logo-transparent_1RRhSMDb9P.png"
             alt="ContentBanao Logo"
-            width={150}
-            height={150}
-            className="h-10 w-10 md:h-12 md:w-12 object-contain"
+            width={40}
+            height={40}
+            className="h-10 w-10 object-contain"
             priority
           />
-
-          {/* Text */}
-          <span className="text-xl md:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+          <span className="text-xl md:text-2xl font-extrabold tracking-tight text-gray-900">
             Content<span className="text-blue-600">Banao</span>
           </span>
         </Link>
 
-        {/* Desktop Nav */}
+        {/* Desktop Links */}
         <div className="hidden md:flex items-center space-x-6">
           {links.map(({ label, path }) => (
             <Link
@@ -63,17 +62,22 @@ export default function MainNavbar() {
           ))}
         </div>
 
-        {/* Right Section: Account Dropdown and Hamburger */}
-        <div className="flex items-center gap-0.5">
+        {/* Right: Account + Hamburger */}
+        <div className="flex items-center gap-2">
           {session && <AccountDropdown />}
-
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100"
           >
             <Menu size={24} />
           </button>
+        </div>
+      </div>
+
+      {/* Search Bar */}
+      <div className="max-w-screen-xl mx-auto px-4 pb-4">
+        <div className="relative">
+          <SearchBar />
         </div>
       </div>
 
@@ -84,7 +88,7 @@ export default function MainNavbar() {
             <Link
               key={label}
               href={path}
-              onClick={() => setMobileOpen(false)} // close on click
+              onClick={() => setMobileOpen(false)}
               className="block text-gray-800 font-medium hover:text-blue-600 transition"
             >
               {label}
