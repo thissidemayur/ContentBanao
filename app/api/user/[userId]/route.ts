@@ -11,14 +11,14 @@ export async function GET(req: NextRequest) {
 
 
     if (!userName) return NextResponse.json(
-        { error: "User Id not found" },
+        { error: "User Name not found" },
         { status: 400 }
     )
 
     try {
         await connectToDB()
 
-        const user = await User.findById(userName).select("-password").lean()
+        const user = await User.findOne({ userName }).select("-password").lean()
 
         if (!user) return NextResponse.json(
             { error: "User not found" },
