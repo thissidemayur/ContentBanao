@@ -1,7 +1,9 @@
 "use client";
 import { useAddCommentMutation } from "@/features/comments/commentsApi";
+import { useAuth } from "@/hooks/userAuth";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 type FormValues = {
   content: string;
@@ -17,9 +19,16 @@ export default function CommentForm({
 }: CommentFormProps) {
   const [addComment] = useAddCommentMutation();
 
+  const { isAuthenticated } = useAuth();
+
   const { register, handleSubmit, reset } = useForm<FormValues>();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    if (!isAuthenticated) {
+      toast.error("You need to be logged in to comment on this post.");
+
+      return;
+    }
     try {
       await addComment({ blogId, content: data.content });
       onCommentAdded(); // to triggered comment list refresh

@@ -48,9 +48,9 @@ const CommentCard: React.FC<CommentCardProps> = ({
         <p className="text-gray-700 text-sm mb-3 leading-relaxed">{message}</p>
 
         <div className="flex items-center gap-3 text-sm">
-          <button className="border px-3 py-1 rounded-lg text-gray-600 hover:border-gray-400 transition">
+          {/* <button className="border px-3 py-1 rounded-lg text-gray-600 hover:border-gray-400 transition">
             Reply
-          </button>
+          </button> */}
 
           {canDelete && (
             <button
@@ -61,7 +61,7 @@ const CommentCard: React.FC<CommentCardProps> = ({
             </button>
           )}
 
-          <button className="flex items-center gap-1 group text-gray-600 hover:text-red-500 transition">
+          {/* <button className="flex items-center gap-1 group text-gray-600 hover:text-red-500 transition">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 p-0.5 rounded-full group-hover:bg-red-100"
@@ -77,7 +77,7 @@ const CommentCard: React.FC<CommentCardProps> = ({
               />
             </svg>
             {likes}
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
