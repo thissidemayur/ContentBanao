@@ -19,8 +19,59 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Blog + Reel website",
-  description: "I have created a blog + reel website",
+  title: "ContentDekho | Blogs, Reels & Learn Together",
+  description:
+    "Discover, learn and create on ContentDekho — a community-driven platform for blogs, video reels, and creative stories. Share your ideas, explore new content, and grow together.",
+  keywords: [
+    "blog platform",
+    "video reels",
+    "blog",
+    "next.js",
+    "react",
+    "mongodb",
+    "mongoose",
+    "Imagekit",
+    "content creation",
+    "creative community",
+    "learning platform",
+    "Next.js blog app",
+    "Next.js video reels",
+    "ImageKit hosting",
+    "open blogging platform",
+    "collaborative learning",
+  ],
+  authors: [{ name: "Mayur Pal", url: "https://contentbanao.vercel.app/" }],
+  creator: "Mayur Pal",
+  openGraph: {
+    type: "website",
+    url: "https://contentbanao.vercel.app/",
+    title: "ContentDekho | Blogs, Reels & Learn Together",
+    description:
+      "Create, discover and learn with ContentDekho — where blogs, video reels, and ideas meet for everyone.",
+    images: [
+      {
+        url: "https://ik.imagekit.io/thissidemayur/ogopengraph_LgzDvH4XMP.jpg",
+        width: 1200,
+        height: 630,
+        alt: "ContentDekho - Blogs & Reels Community",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@thissidemayur",
+    creator: "@thissidemayur",
+    title: "ContentDekho | Blogs, Reels & Learn Together",
+    description:
+      "Create, share and explore blogs and video reels with ContentDekho — a platform for creators and learners alike.",
+    images: ["https://ik.imagekit.io/thissidemayur/ogopengraph_LgzDvH4XMP.jpg"],
+  },
+  other: {
+    "instagram:site": "@thissidemayur",
+    "linkedin:site": "https://www.linkedin.com/in/thissidemayur",
+    "github:site": "https://github.com/thissidemayur",
+  },
+  metadataBase: new URL("https://contentbanao.vercel.app"),
 };
 
 export default function RootLayout({
