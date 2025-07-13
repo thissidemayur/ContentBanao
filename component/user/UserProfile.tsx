@@ -1,10 +1,11 @@
 "use client";
 
-import { User, Edit } from "lucide-react";
+import { User, Edit, Share2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useGetUserByIdQuery } from "@/features/auth/authApi";
 import { isRTKError } from "@/types/rtkError.types";
+import { handleNativeShare } from "@/lib/Backend-helperFn";
 
 export default function UserProfile({ id }: { id: string }) {
   console.log("Id: ", id);
@@ -57,13 +58,29 @@ export default function UserProfile({ id }: { id: string }) {
               <h2 className="text-3xl font-bold text-gray-900 text-center sm:text-left">
                 {user?.userName || "Unnamed User"}
               </h2>
-              <Link
-                href="/profile/update-profile"
-                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-full border border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white transition"
-              >
-                <Edit size={16} />
-                Edit Profile
-              </Link>
+              <div className=" flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4  ">
+                <Link
+                  href="/profile/update-profile"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-full border border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white transition text-center"
+                >
+                  <Edit size={16} />
+                  Edit Profile
+                </Link>
+
+                <button
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-full border  text-gray-100 bg-gray-800 hover:bg-gray-200 hover:text-gray-800 transition text-center"
+                  onClick={() =>
+                    handleNativeShare(
+                      user?.userName ?? "Untitled userName",
+                      window.location.href
+                    )
+                  }
+                >
+                  {" "}
+                  <Share2 size={18} />
+                  Share{" "}
+                </button>
+              </div>
             </div>
           </div>
 

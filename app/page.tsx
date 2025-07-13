@@ -15,77 +15,81 @@ const EmblaCarousel = dynamic(() => import("@/component/Carousel"));
 const categoriesItems = [
   {
     id: 1,
-    image: "https://picsum.photos/seed/travel/800/600",
+    image: "https://ik.imagekit.io/thissidemayur/travelDiaries_jtgSInKRp.jpg",
     title: "Travel Diaries",
   },
   {
     id: 2,
-    image: "https://picsum.photos/seed/philosophy/800/600",
+    image: "https://ik.imagekit.io/thissidemayur/philoshphiy_QHMefoEy7.jpg",
     title: "Philosophy Talks",
   },
   {
     id: 3,
-    image: "https://picsum.photos/seed/science/800/600",
+    image: "https://ik.imagekit.io/thissidemayur/science_z3YL5jTlg.jpg",
     title: "Science Explained",
   },
   {
     id: 4,
-    image: "https://picsum.photos/seed/technology/800/600",
+    image: "https://ik.imagekit.io/thissidemayur/tech-ai_6InSpo-Ig.jpg",
     title: "Tech & AI Trends",
   },
   {
     id: 5,
-    image: "https://picsum.photos/seed/socialissues/800/600",
+    image: "https://ik.imagekit.io/thissidemayur/socialissue_kY9A1LaPf.jpg",
     title: "Social Issue Debates",
   },
   {
     id: 6,
-    image: "https://picsum.photos/seed/psychology/800/600",
+    image: "https://ik.imagekit.io/thissidemayur/humanPhycology_mP3AK-EDz.jpg",
     title: "Human Psychology",
   },
   {
     id: 7,
-    image: "https://picsum.photos/seed/journaling/800/600",
+    image:
+      "https://ik.imagekit.io/thissidemayur/journaling_technologies_GUVaVbPtL.jpg",
     title: "Journaling Techniques",
   },
   {
     id: 8,
-    image: "https://picsum.photos/seed/studyhacks/800/600",
+    image: "https://ik.imagekit.io/thissidemayur/studyHack_XE_JancXO_.jpg",
     title: "Study Hacks & Focus",
   },
   {
     id: 9,
-    image: "https://picsum.photos/seed/breakups/800/600",
+    image: "https://ik.imagekit.io/thissidemayur/breakupStories_240r5MECDE.jpg",
     title: "Breakup Stories",
   },
   {
     id: 10,
-    image: "https://picsum.photos/seed/menwomenrights/800/600",
+    image: "https://ik.imagekit.io/thissidemayur/menWomenRight_kccRjCiDO.jpg",
     title: "Men & Women Rights",
   },
   {
     id: 11,
-    image: "https://picsum.photos/seed/journalism/800/600",
+    image:
+      "https://ik.imagekit.io/thissidemayur/modernJournalisam_E7D1tuGEM.jpg",
     title: "Modern Journalism",
   },
-  {
-    id: 12,
-    image: "https://picsum.photos/seed/agnosticism/800/600",
-    title: "Agnosticism Talks",
-  },
+  // {
+  //   id: 12,
+  //   image: "https://picsum.photos/seed/agnosticism/800/600",
+  //   title: "Agnosticism Talks",
+  // },
   {
     id: 13,
-    image: "https://picsum.photos/seed/philosophydebates/800/600",
+    image:
+      "https://ik.imagekit.io/thissidemayur/agnosistictalks_tzzWpuJPsH.jpg",
     title: "Deep Philosophy Debates",
   },
   {
     id: 14,
-    image: "https://picsum.photos/seed/nightlife/800/600",
+    image:
+      "https://ik.imagekit.io/thissidemayur/nightlifeDiaries_Rt01cVxYJ.jpg",
     title: "Nightlife Diaries",
   },
   {
     id: 15,
-    image: "https://picsum.photos/seed/hustle/800/600",
+    image: "https://ik.imagekit.io/thissidemayur/hustleStories_Yq9rVokLd.jpg",
     title: "Hustle Stories",
   },
 ];
@@ -96,6 +100,14 @@ const testimonials: Array<{
   designation: string;
   src: string;
 }> = [
+  {
+    quote:
+      "As a content creator, I love platforms that celebrate creativity and let ideas shine. ContentBanao makes it effortless to share stories, visuals, and connect with an engaged audience.",
+    name: "Sonam Pal",
+    designation: "Content Creator",
+    src: "https://ik.imagekit.io/thissidemayur/sonam_93olQWpDv.jpeg",
+  },
+
   {
     quote:
       "As a student, this blog keeps me inspired beyond textbooks. The reels are a perfect dose of creativity between study breaks.",
@@ -144,7 +156,7 @@ const testimonials: Array<{
       "For content creators like me, it’s inspiring to see platforms where visuals, story, and authenticity come together so well.",
     name: "Vinay Pal",
     designation: "Content Creator",
-    src: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=3540&q=80",
+    src: "https://ik.imagekit.io/thissidemayur/vinay_m3DC8qlsz.avif",
   },
 ];
 
@@ -160,7 +172,10 @@ export default function Home() {
 
       {/* Blog categories:  */}
       <div>
-        <EmblaCarousel items={categoriesItems} title="Blog Categories" />{" "}
+        <EmblaCarousel
+          items={categoriesItems}
+          title="Discover Topics You’ll Love"
+        />{" "}
       </div>
 
       {/* Testimonial */}

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import {
-  useGetUserQuery,
+  useGetUserByIdQuery,
   useUpdateProfileMutation,
 } from "@/features/auth/authApi";
 import { User, Mail, UserCircle } from "lucide-react";
@@ -37,10 +37,11 @@ export default function UpdateProfile() {
     data,
     isLoading,
     refetch: refetchUser,
-  } = useGetUserQuery(userAuth?.id || "", {
+  } = useGetUserByIdQuery(userAuth?.userName || "", {
     skip: !shouldFetch,
     refetchOnMountOrArgChange: true,
   });
+  console.log("user: ", data);
 
   const {
     register,
@@ -82,7 +83,13 @@ export default function UpdateProfile() {
       const latestUser = await refetchUser().unwrap();
       const latestUserData = latestUser?.data;
       if (!latestUserData?._id) throw new Error("Missing user id");
-
+      console.log("latestUser: ", latestUserData);
+      // Update NextAuth session JWT values too
+      await update({
+        userName: latestUserData.userName,
+        avatar: latestUserData.avatar,
+        bio: latestUserData.bio,
+      });
       dispatch(
         setUser({
           id: latestUserData?._id?.toString(),
@@ -92,13 +99,6 @@ export default function UpdateProfile() {
           bio: latestUserData.bio,
         })
       );
-
-      // Update NextAuth session JWT values too
-      await update({
-        userName: latestUserData.userName,
-        avatar: latestUserData.avatar,
-        bio: latestUserData.bio,
-      });
       toast.success(res.message);
       setTimeout(() => {
         router.push(`/profile/${formData.userName}`);
