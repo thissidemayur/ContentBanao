@@ -10,8 +10,9 @@ import { useAuth } from "@/hooks/userAuth";
 import LikeButton from "../LikeButton";
 import CommentForm from "../comment/CommentForm";
 import { toast } from "sonner";
-import { getValidImageSrc } from "@/lib/Backend-helperFn";
+import { getValidImageSrc, handleNativeShare } from "@/lib/Backend-helperFn";
 import CommentList from "../comment/CommentList";
+import { Share2 } from "lucide-react";
 
 interface Props {
   slug: string;
@@ -29,7 +30,7 @@ export default function BlogPage({ slug }: Props) {
     return <p className="text-center text-gray-500 mt-20">Loading...</p>;
 
   if (error) {
-    console.error("error: ", error);
+    console.log("error: ", error);
     return (
       <p className="text-center text-red-500 mt-20">Blog is not Present</p>
     );
@@ -106,37 +107,55 @@ export default function BlogPage({ slug }: Props) {
           </h1>
 
           {/* Top Action Buttons */}
-          <div className="max-w-4xl mx-auto px-6 flex justify-end gap-3 pt-8">
-            <p className="mt-4 text-base text-gray-600 italic">
-              by {blog.authorId?.userName}
-              <span className="font-medium text-gray-800"></span>
-            </p>
+          <div className="max-w-4xl mx-auto md:px-6 flex justify-between  pt-8">
+            <button
+              className="flex items-center gap-2 px-1.5  md:px-3 md:py-1.5 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition hover:scale-105"
+              onClick={() =>
+                handleNativeShare(
+                  blog.title ?? "Untitled Blog",
+                  window.location.href
+                )
+              }
+            >
+              {" "}
+              <Share2 size={18} />
+              Share{" "}
+            </button>
 
-            {/* Like Button */}
-            <LikeButton
-              slug={blog.slug ?? ""}
-              likes={post?.data.likes?.length ?? 0}
-              liked={(post?.data.likes as string[])?.includes(userId) ?? false}
-            />
+            <div className="flex gap-3 justify-end">
+              <p className="mt-4 text-base text-gray-600 italic">
+                by {blog.authorId?.userName}
+                <span className="font-medium text-gray-800"></span>
+              </p>
 
-            {/* Show Edit + Delete only for author */}
-            {userAuth?.id === blog.authorId?._id && (
-              <>
-                <button
-                  onClick={handleEdit}
-                  className="flex items-center gap-1 bg-gray-100 text-gray-800 text-sm font-medium py-2 px-4 rounded-lg hover:bg-gray-200 transition"
-                >
-                  ✏️ Edit
-                </button>
+              {/* Like Button */}
+              <LikeButton
+                slug={blog.slug ?? ""}
+                likes={post?.data.likes?.length ?? 0}
+                liked={
+                  (post?.data.likes as string[])?.includes(userId) ?? false
+                }
+              />
 
-                <button
-                  onClick={handleDelete}
-                  className="flex items-center gap-1 bg-red-600 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-red-700 transition"
-                >
-                  🗑️ Delete
-                </button>
-              </>
-            )}
+              {/* Show Edit + Delete only for author */}
+              {userAuth?.id === blog.authorId?._id && (
+                <>
+                  <button
+                    onClick={handleEdit}
+                    className="flex items-center gap-1 bg-gray-100 text-gray-800 text-sm font-medium py-2 px-4 rounded-lg hover:bg-gray-200 transition"
+                  >
+                    ✏️ Edit
+                  </button>
+
+                  <button
+                    onClick={handleDelete}
+                    className="flex items-center gap-1 bg-red-600 text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-red-700 transition"
+                  >
+                    🗑️ Delete
+                  </button>
+                </>
+              )}
+            </div>
           </div>
 
           <p className="mt-6 text-lg text-gray-700 leading-relaxed">

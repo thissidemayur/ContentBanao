@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useGetBlogsQuery } from "@/features/blogs/blogsApi";
-import { getValidImageSrc } from "@/lib/Backend-helperFn";
+import { getValidImageSrc, handleNativeShare } from "@/lib/Backend-helperFn";
+import { Share2 } from "lucide-react";
 
 const BlogList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -113,15 +114,31 @@ const BlogList = () => {
                     ))}
                   </div>
 
-                  <div className="mt-4">
+                  <div className="mt-4 flex justify-between">
                     <Link
                       href={`/blog/${encodeURIComponent(
                         post.slug ?? "default-slug"
                       )}`}
-                      className="text-rose-500 font-semibold hover:text-rose-600 transition"
+                      className="text-rose-500 font-semibold hover:text-rose-600 transition hover:scale-105"
                     >
                       Read more →
                     </Link>
+
+                    <button
+                      className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition hover:scale-105"
+                      onClick={() =>
+                        handleNativeShare(
+                          post.title ?? "Untitled Blog",
+                          `${window.location.origin}/blog/${encodeURIComponent(
+                            post.slug ?? "default-slug"
+                          )}`
+                        )
+                      }
+                    >
+                      {" "}
+                      <Share2 size={18} />
+                      Share{" "}
+                    </button>
                   </div>
                 </div>
               </article>
