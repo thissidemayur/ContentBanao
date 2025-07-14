@@ -1,5 +1,5 @@
 import { withAuth } from "next-auth/middleware"
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 
 export default withAuth(
     // `withAuth` augments your `Request` with the user's token.
@@ -24,7 +24,8 @@ export default withAuth(
                     "/api/auth",
                     "/reels",
                     "/blog",
-                    "/profile"
+                    "/profile",
+                    "/api/search"
                 ];
 
                 if (pathname.startsWith("/api/user") && req.method === "GET") return true

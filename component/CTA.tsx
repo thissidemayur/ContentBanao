@@ -1,6 +1,8 @@
 "use client";
 
 import { AnimatedTooltip } from "@/components/ui/animated-tooltip";
+import { useAuth } from "@/hooks/userAuth";
+import Link from "next/link";
 import React from "react";
 
 const people = [
@@ -58,6 +60,8 @@ const people = [
 ];
 
 const CTA = () => {
+  const { isAuthenticated } = useAuth();
+
   return (
     <div className="relative py-16">
       {/* Background gradients */}
@@ -85,24 +89,26 @@ const CTA = () => {
               binge-worthy reels curated for curious minds. No fluff, no
               clickbait — just authentic, valuable content you’ll love.
             </p>
-            <div className="flex flex-wrap justify-center gap-6">
-              <a
-                href="#"
-                className="relative flex h-12 w-full items-center justify-center px-8 before:absolute before:inset-0 before:rounded-full before:bg-cyan-600 before:transition before:duration-300 hover:before:bg-cyan-700 active:duration-75 active:before:scale-95 sm:w-max"
-              >
-                <span className="relative text-base font-semibold text-white">
-                  Signup
-                </span>
-              </a>
-              <a
-                href="#"
-                className="relative flex h-12 w-full items-center justify-center px-8 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-teal-500/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max"
-              >
-                <span className="relative text-base font-semibold text-cyan-600 dark:text-white">
-                  Login
-                </span>
-              </a>
-            </div>
+            {isAuthenticated && (
+              <div className="flex flex-wrap justify-center gap-6">
+                <Link
+                  href="/auth/login"
+                  className="relative flex h-12 w-full items-center justify-center px-8 before:absolute before:inset-0 before:rounded-full before:bg-cyan-600 before:transition before:duration-300 hover:before:bg-cyan-700 active:duration-75 active:before:scale-95 sm:w-max"
+                >
+                  <span className="relative text-base font-semibold text-white">
+                    Signup
+                  </span>
+                </Link>
+                <Link
+                  href="/auth/register"
+                  className="relative flex h-12 w-full items-center justify-center px-8 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-teal-500/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max"
+                >
+                  <span className="relative text-base font-semibold text-cyan-600 dark:text-white">
+                    Login
+                  </span>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

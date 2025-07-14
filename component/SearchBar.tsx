@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { Search } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
@@ -20,9 +21,7 @@ export default function SearchBar() {
     setResults(res.data.data);
     setShowResults(true);
   };
-  console.log("itemL ", results[0]);
-
-  console.log(results);
+  console.log("API response ✅", results);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -101,11 +100,25 @@ export default function SearchBar() {
                   className="block border border-gray-200 p-3 rounded-lg hover:bg-gray-50 transition cursor-pointer"
                 >
                   <div className="flex items-center gap-3 border">
-                    <img
-                      src={item.media[0].url || item.media[0].type}
-                      alt="avatar"
-                      className="w-8 h-8 rounded-full object-cover border"
-                    />
+                    {item.media &&
+                    item.media.length > 0 &&
+                    item.media[0].url ? (
+                      <Image
+                        width={8}
+                        height={8}
+                        alt="blog"
+                        src={item.media[0].url}
+                        className="w-8 h-8 rounded-full object-cover border"
+                      />
+                    ) : (
+                      <Image
+                        width={8}
+                        height={8}
+                        alt="blog"
+                        src="/default-image.png"
+                        className="w-8 h-8 rounded-full object-cover border"
+                      />
+                    )}
                     <p className="font-semibold text-sm text-gray-800">
                       {item.title}
                     </p>
@@ -118,11 +131,23 @@ export default function SearchBar() {
                   href={`/profile/${item.userName}`}
                   className="flex items-center gap-3 border border-gray-200 p-3 rounded-lg hover:bg-gray-50 transition cursor-pointer"
                 >
-                  <img
-                    src={item.avatar}
-                    alt="avatar"
-                    className="w-8 h-8 rounded-full object-cover border"
-                  />
+                  {item.avatar ? (
+                    <Image
+                      width={8}
+                      height={8}
+                      alt="blog"
+                      src={item.avatar}
+                      className="w-8 h-8 rounded-full object-cover border"
+                    />
+                  ) : (
+                    <Image
+                      width={8}
+                      height={8}
+                      alt="blog"
+                      src={item.userName || "unknown"}
+                      className="w-8 h-8 rounded-full object-cover border"
+                    />
+                  )}
                   <p className="text-gray-800 font-medium">{item.userName}</p>
                 </Link>
               )

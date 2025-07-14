@@ -206,7 +206,6 @@ export default function BlogPage({ slug }: Props) {
 
       {/* comments */}
       <div>
-        <h2 className="text-xl font-semibold mt-8">Comments</h2>
         <CommentForm blogId={blogId} onCommentAdded={handleCommentAdded} />
         <CommentList blogId={blogId} />
       </div>
