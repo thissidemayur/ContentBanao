@@ -56,7 +56,7 @@ export default function SearchBar() {
             size={18}
           />
           <input
-            type="text"
+            type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}

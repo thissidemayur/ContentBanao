@@ -89,7 +89,7 @@ const CTA = () => {
               binge-worthy reels curated for curious minds. No fluff, no
               clickbait — just authentic, valuable content you’ll love.
             </p>
-            {isAuthenticated && (
+            {!isAuthenticated && (
               <div className="flex flex-wrap justify-center gap-6">
                 <Link
                   href="/auth/login"
